@@ -126,9 +126,7 @@ class FirebaseAuthService {
 
   static Future<int> getUserAccessLevel() async {
     var token = await _firebaseAuth.currentUser.getIdTokenResult();
-    var claims = token.claims.entries.where((element) => CLAIMS.contains(element.key)).toList();
-    var role = claims.firstWhere((element) => element.value == true);
-    return CLAIMS.indexOf(role.key) + 1;
+    return token.claims['accessLevel'];
   }
 
   static Future<Result> setDisplayName(String name) async {
@@ -149,4 +147,6 @@ class FirebaseAuthService {
       return Result(code: Code.EXCEPTION, message: e.toString());
     }
   }
+
+  static User get user => _firebaseAuth.currentUser;
 }

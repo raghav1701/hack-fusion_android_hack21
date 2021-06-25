@@ -9,12 +9,14 @@ enum Code {
   EXCEPTION,
 }
 
-class Result {
+class Result<T> {
   final Code code;
   final String message;
+  final T data;
 
   Result({
     @required this.code,
     this.message,
+    this.data,
   });
 }
