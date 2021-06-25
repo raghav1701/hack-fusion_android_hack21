@@ -1,15 +1,15 @@
 library views;
 
-export 'welcome.dart';
-export 'signup.dart';
-export 'signin.dart';
+export 'auth/welcome.dart';
+export 'auth/signup.dart';
+export 'auth/signin.dart';
 export 'dashboard.dart';
 export 'chat.dart';
 export 'profile.dart';
+export 'about.dart';
 
 // fragment view items
-export 'home.dart';
-export 'trending.dart';
-export 'post.dart';
-export 'ngos.dart';
-export 'about.dart';
+export 'fragments/home.dart';
+export 'fragments/trending.dart';
+export 'fragments/add_post.dart';
+export 'fragments/ngos.dart';

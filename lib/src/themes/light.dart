@@ -40,4 +40,9 @@ ThemeData lightTheme = ThemeData.light().copyWith(
     filled: true,
     fillColor: const Color(0xFFEEEEEE),
   ),
+
+  snackBarTheme: SnackBarThemeData(
+    behavior: SnackBarBehavior.floating,
+    actionTextColor: Colors.purple,
+  ),
 );

@@ -3,9 +3,11 @@ import 'dart:io';
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
+import 'package:flutter/services.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import 'package:social_media_app/social_media.dart';
 
-typedef _OnFinishCallback = void Function(UserCredential user);
+typedef _OnFinishCallback = void Function(User user);
 typedef _OnErrorCallback = void Function(Code code, String message);
 
 enum _Operation {
@@ -15,6 +17,7 @@ enum _Operation {
 
 class FirebaseAuthService {
   static FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
+  static final GoogleSignIn _googleSignIn = GoogleSignIn();
 
   final String email;
   final String password;
@@ -30,15 +33,13 @@ class FirebaseAuthService {
   final _OnErrorCallback onError;
 
   FirebaseAuthService({
-    @required this.email,
-    @required this.password,
+    this.email,
+    this.password,
     this.name,
     @required this.onStart,
     @required this.onFinish,
     @required this.onError,
-  })  : assert(email != null),
-        assert(password != null),
-        assert(onStart != null),
+  })  : assert(onStart != null),
         assert(onFinish != null),
         assert(onError != null);
 
@@ -65,7 +66,7 @@ class FirebaseAuthService {
         await setDisplayName(name);
       }
       if (user?.user != null) {
-        onFinish(user);
+        onFinish(user?.user);
       } else {
         throw 'Unknown Error';
       }
@@ -73,6 +74,40 @@ class FirebaseAuthService {
       onError(Code.FIREBASEAUTH_EXCEPTION, e.message);
     } on SocketException catch (e) {
       onError(Code.SOCKET_EXCEPTION, e.message);
+    } on PlatformException catch (e) {
+      onError(Code.PLATFORM_EXCEPTION, e.message);
+    } on TimeoutException catch (e) {
+      onError(Code.TIMEOUT_EXCEPTION, e.message);
+    } catch (e) {
+      onError(Code.EXCEPTION, e.message);
+    }
+  }
+
+  Future<void> googleOAuth() async {
+    onStart();
+    try {
+      var googleUser = await _googleSignIn.signIn();
+      print("Google Sign IN");
+      var googleAuth = await googleUser.authentication;
+      print("Google Authentication");
+      var credential = GoogleAuthProvider.credential(
+        accessToken: googleAuth.accessToken,
+        idToken: googleAuth.idToken,
+      );
+      print("Google Cred");
+      var user = await _firebaseAuth.signInWithCredential(credential);
+      print("Google Firebase");
+      if (user?.user != null) {
+        onFinish(user?.user);
+      } else {
+        throw 'Unknown Error';
+      }
+    } on FirebaseAuthException catch (e) {
+      onError(Code.FIREBASEAUTH_EXCEPTION, e.message);
+    } on SocketException catch (e) {
+      onError(Code.SOCKET_EXCEPTION, e.message);
+    } on PlatformException catch (e) {
+      onError(Code.PLATFORM_EXCEPTION, e.message);
     } on TimeoutException catch (e) {
       onError(Code.TIMEOUT_EXCEPTION, e.message);
     } catch (e) {
@@ -90,12 +125,12 @@ class FirebaseAuthService {
       return Result(code: Code.FIREBASEAUTH_EXCEPTION, message: e.message);
     } on SocketException catch (e) {
       return Result(code: Code.SOCKET_EXCEPTION, message: e.message);
+    } on PlatformException catch (e) {
+      return Result(code: Code.PLATFORM_EXCEPTION, message: e.message);
     } on TimeoutException catch (e) {
       return Result(code: Code.TIMEOUT_EXCEPTION, message: e.message);
     } catch (e) {
       return Result(code: Code.EXCEPTION, message: e.message);
     }
   }
-
-  static String get username => _firebaseAuth.currentUser.displayName;
 }

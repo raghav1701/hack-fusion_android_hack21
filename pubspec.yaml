@@ -17,6 +17,7 @@ dependencies:
   cloud_firestore: ^2.2.2
   geolocator: ^7.1.0
   progress_dialog: ^1.2.4
+  google_sign_in: ^5.0.4
 
 dev_dependencies:
   flutter_test:
