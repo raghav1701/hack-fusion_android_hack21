@@ -8,6 +8,8 @@ class Routes {
   static const welcome = '/welcome';
   static const signin = '$welcome/signin';
   static const signup = '$welcome/signup';
+  static const terms = '/termsAndConditions';
+
   static const dashboard = '/dashboard';
   static const chat = '$dashboard/chat';
   static const profile = '$dashboard/profile';
@@ -17,6 +19,8 @@ class Routes {
     welcome: (_) => WelcomeScreen(),
     signup: (_) => SignupScreen(),
     signin: (_) => SigninScreen(),
+    terms: (_) => TermsAndConditionsScreen(),
+
     dashboard: (_) => DashboardScreen(),
     chat: (_) => ChatScreen(),
     profile: (_) => ProfileScreen(),

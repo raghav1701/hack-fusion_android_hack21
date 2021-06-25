@@ -87,27 +87,27 @@ class FirebaseAuthService {
     onStart();
     try {
       var googleUser = await _googleSignIn.signIn();
-      print("Google Sign IN");
-      var googleAuth = await googleUser.authentication;
-      print("Google Authentication");
-      var credential = GoogleAuthProvider.credential(
-        accessToken: googleAuth.accessToken,
-        idToken: googleAuth.idToken,
-      );
-      print("Google Cred");
-      var user = await _firebaseAuth.signInWithCredential(credential);
-      print("Google Firebase");
-      if (user?.user != null) {
-        onFinish(user?.user);
+      if (googleUser != null) {
+        var googleAuth = await googleUser.authentication;
+        var credential = GoogleAuthProvider.credential(
+          accessToken: googleAuth.accessToken,
+          idToken: googleAuth.idToken,
+        );
+        var user = await _firebaseAuth.signInWithCredential(credential);
+        if (user?.user != null) {
+          onFinish(user?.user);
+        } else {
+          throw 'Unknown Error';
+        }
       } else {
-        throw 'Unknown Error';
+        onFinish(null);
       }
     } on FirebaseAuthException catch (e) {
       onError(Code.FIREBASEAUTH_EXCEPTION, e.message);
     } on SocketException catch (e) {
       onError(Code.SOCKET_EXCEPTION, e.message);
     } on PlatformException catch (e) {
-      onError(Code.PLATFORM_EXCEPTION, e.message);
+      onError(Code.PLATFORM_EXCEPTION, '${e?.message}');
     } on TimeoutException catch (e) {
       onError(Code.TIMEOUT_EXCEPTION, e.message);
     } catch (e) {

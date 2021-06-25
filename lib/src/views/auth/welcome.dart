@@ -2,6 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:progress_dialog/progress_dialog.dart';
 import 'package:social_media_app/social_media.dart';
 
+enum _ButtonType {
+  SIGNUP,
+  LOGIN,
+  GOOGLE,
+  TnC,
+}
+
 class WelcomeScreen extends StatefulWidget {
   static const _buttonPadding = 42.0;
 
@@ -12,13 +19,15 @@ class WelcomeScreen extends StatefulWidget {
 class _WelcomeScreenState extends State<WelcomeScreen> {
   ProgressDialog progressDialog;
 
-  void handleButtons(BuildContext context, int index) {
-    if (index == 0) {
+  void handleButtons(BuildContext context, _ButtonType btn) {
+    if (btn == _ButtonType.SIGNUP) {
       Navigator.of(context).pushNamed(Routes.signup);
-    } else if (index == 1) {
+    } else if (btn == _ButtonType.LOGIN) {
       Navigator.of(context).pushNamed(Routes.signin);
-    } else {
+    } else if (btn == _ButtonType.GOOGLE) {
       handleGoogleLogin(context);
+    } else if (btn == _ButtonType.TnC) {
+      Navigator.of(context).pushNamed(Routes.terms);
     }
   }
 
@@ -29,7 +38,9 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
       },
       onFinish: (user) {
         progressDialog.hide();
-        Navigator.of(context).pushReplacementNamed(Routes.dashboard);
+        if (user != null) {
+          Navigator.of(context).pushReplacementNamed(Routes.dashboard);
+        }
       },
       onError: (code, message) {
         progressDialog.hide();
@@ -42,13 +53,19 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
 
   final image = Padding(
     padding: const EdgeInsets.symmetric(
-      horizontal: 16.0,
+      horizontal: 32.0,
       vertical: 24.0,
     ),
     child: Image.asset(
       Assets.welcomePageImage,
       fit: BoxFit.fitWidth,
     ),
+  );
+
+  final divider = Divider(
+    indent: WelcomeScreen._buttonPadding + 32.0,
+    endIndent: WelcomeScreen._buttonPadding + 32.0,
+    height: 30.0,
   );
 
   @override
@@ -83,52 +100,52 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
             children: [
               image,
               SizedBox(
-                height: 20.0,
+                height: 8.0,
               ),
               Text(
-                'Hey, How U Doin?',
+                'Apna\nParyawaran',
+                textAlign: TextAlign.center,
                 style: TextStyle(
+                  color: Color(0xff0fb63e),
                   fontSize: 30,
-                  fontWeight: FontWeight.w500,
+                  fontFamily: "Poppins",
+                  fontWeight: FontWeight.w700,
                 ),
               ),
               SizedBox(
                 height: 24.0,
               ),
               Text(
-                'To Continue',
+                'Join hands to save the\nEnvironment',
                 style: TextStyle(
                   fontSize: 18,
-                  fontWeight: FontWeight.w300,
+                  fontWeight: FontWeight.w500,
                 ),
+                textAlign: TextAlign.center,
               ),
               SizedBox(
-                height: 8.0,
+                height: 16.0,
               ),
-              WelcomePageButton(
+              AuthButton(
                 buttonText: 'Sign Up',
                 onPressed: () {
-                  handleButtons(context, 0);
+                  handleButtons(context, _ButtonType.SIGNUP);
                 },
               ),
-              WelcomePageButton(
+              AuthButton(
                 buttonText: 'Login',
                 onPressed: () {
-                  handleButtons(context, 1);
+                  handleButtons(context, _ButtonType.LOGIN);
                 },
                 fillWithDark: false,
               ),
-              Divider(
-                indent: WelcomeScreen._buttonPadding + 30.0,
-                endIndent: WelcomeScreen._buttonPadding + 30.0,
-                height: 30.0,
-              ),
+              divider,
               Builder(
                 builder: (context) {
-                  return WelcomePageButton(
+                  return AuthButton(
                     buttonText: 'Continue with Google',
                     onPressed: () {
-                      handleButtons(context, 2);
+                      handleButtons(context, _ButtonType.GOOGLE);
                     },
                   );
                 }
@@ -142,9 +159,9 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                   children: [
                     Text('Read our '),
                     InteractiveText(
-                      text: 'Terms and Conditions',
+                      'Terms and Conditions',
                       onTap: () {
-                        //TODO: SHOW TERMS AND CONDITIONS
+                        handleButtons(context, _ButtonType.TnC);
                       },
                     ),
                   ],

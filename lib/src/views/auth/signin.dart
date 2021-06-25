@@ -50,7 +50,7 @@ class _SigninScreenState extends State<SigninScreen> {
   }
 
   void handleForgotPassword() {
-
+    //TODO: Forgot Password
   }
 
   void handleButton() {
@@ -83,7 +83,7 @@ class _SigninScreenState extends State<SigninScreen> {
   final image = Padding(
     padding: const EdgeInsets.symmetric(
       horizontal: 32.0,
-      vertical: 44.0,
+      vertical: 64.0,
     ),
     child: Image.asset(
       Assets.loginPageImage,
@@ -129,19 +129,28 @@ class _SigninScreenState extends State<SigninScreen> {
                   ),
                 ),
                 AuthButton(
-                  title: 'LOGIN',
+                  buttonText: 'Login',
                   onPressed: saveForm,
                 ),
-                InteractiveText(
-                  text: 'Forgot Password?',
-                  onTap: handleForgotPassword,
+                SizedBox(
+                  height: 24.0,
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text('Don\'t have an account? '),
+                    InteractiveText(
+                      'Sign Up',
+                      onTap: handleButton,
+                    ),
+                  ],
                 ),
                 SizedBox(
-                  height: 16.0,
+                  height: 8.0,
                 ),
                 InteractiveText(
-                  text: 'Don\'t have an account? Signup Now',
-                  onTap: handleButton,
+                  'Forgot Password?',
+                  onTap: handleForgotPassword,
                 ),
                 SizedBox(
                   height: 16.0,

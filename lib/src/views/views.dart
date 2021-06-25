@@ -3,6 +3,8 @@ library views;
 export 'auth/welcome.dart';
 export 'auth/signup.dart';
 export 'auth/signin.dart';
+export 'terms.dart';
+
 export 'dashboard.dart';
 export 'chat.dart';
 export 'profile.dart';

@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 
 class InteractiveText extends InkWell {
-  InteractiveText({
-    @required String text,
+  InteractiveText(
+    String text, {
     @required Function onTap,
     Color textColor = const Color(0xFF10B73F),
+    FontWeight fontWeight = FontWeight.bold,
   }) : super(
     splashColor: Colors.transparent,
     overlayColor: MaterialStateProperty.all(Colors.transparent),
@@ -15,6 +16,7 @@ class InteractiveText extends InkWell {
       text,
       style: TextStyle(
         color: textColor,
+        fontWeight: fontWeight,
       ),
       overflow: TextOverflow.ellipsis,
     ),

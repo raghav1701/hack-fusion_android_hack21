@@ -16,21 +16,24 @@ class _SignupScreenState extends State<SignupScreen> {
   GlobalKey<ScaffoldState> scaffoldKey = GlobalKey();
 
   ProgressDialog progressDialog;
-  bool termsAndConditions = false;
   String name, email, password, error;
 
   void saveForm() {
     if (!formKey.currentState.validate()) return;
-    if (!termsAndConditions && mounted) {
-      setState(() {
-        error = 'Please accept our terms and conditions';
-      });
-      return;
-    }
-
     formKey.currentState.save();
     FocusScope.of(context).unfocus();
-    handleSignUp();
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      useSafeArea: true,
+      builder: (_) => TermsAndConditionsDialog(
+        onDecline: () => Navigator.of(context).pop(),
+        onAccept: () {
+          Navigator.of(context).pop();
+          handleSignUp();
+        },
+      ),
+    );
   }
 
   void handleSignUp() async {
@@ -87,7 +90,7 @@ class _SignupScreenState extends State<SignupScreen> {
 
   final image = Padding(
     padding: const EdgeInsets.symmetric(
-      horizontal: 32.0,
+      horizontal: 44.0,
       vertical: 44.0,
     ),
     child: Image.asset(
@@ -125,25 +128,35 @@ class _SignupScreenState extends State<SignupScreen> {
                   textInputType: TextInputType.visiblePassword,
                   showText: false,
                 ),
-                buildTermsAndConditions(context),
                 Visibility(
                   visible: error != null,
                   child: Padding(
-                    padding: const EdgeInsets.only(
-                      left: SignupScreen.btnPadding,
-                      right: SignupScreen.btnPadding,
-                      bottom: 8.0
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: SignupScreen.btnPadding,
+                      vertical: 8.0
                     ),
                     child: Text('$error', style: ThemeConstants.kErrorMessageTextStyle),
                   ),
+                  replacement: SizedBox(
+                    height: 16.0,
+                  ),
                 ),
                 AuthButton(
-                  title: 'SIGN UP',
+                  buttonText: 'Sign Up',
                   onPressed: saveForm,
                 ),
-                InteractiveText(
-                  text: 'Already have an account? Login Now',
-                  onTap: handleButton,
+                SizedBox(
+                  height: 16.0,
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text('Already have an account? '),
+                    InteractiveText(
+                      'Login',
+                      onTap: handleButton,
+                    ),
+                  ],
                 ),
                 SizedBox(
                   height: 16.0,
@@ -171,35 +184,6 @@ class _SignupScreenState extends State<SignupScreen> {
         validator: validator,
         keyboardType: textInputType,
         obscureText: !showText,
-      ),
-    );
-  }
-
-  Widget buildTermsAndConditions(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(
-        horizontal: SignupScreen.btnPadding,
-      ),
-      child: Row(
-        children: [
-          Checkbox(
-            value: termsAndConditions,
-            onChanged: (val) {
-              setState(() => termsAndConditions = val);
-            },
-          ),
-          Text(
-            'I agree to the '
-          ),
-          Expanded(
-            child: InteractiveText(
-              text: 'Terms and Conditions',
-              onTap: () {
-                //TODO: SHOW TERMS AND CONDITIONS
-              },
-            ),
-          )
-        ],
       ),
     );
   }
