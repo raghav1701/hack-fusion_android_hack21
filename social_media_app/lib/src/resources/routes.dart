@@ -12,7 +12,10 @@ class Routes {
 
   static const dashboard = '/dashboard';
   static const chat = '$dashboard/chat';
-  static const profile = '$dashboard/profile';
+
+  static const profile = '/profile';
+  static const upgrade = '$profile/upgrade';
+  static const editProfile = '$profile/edit';
 
   static Map<String, WidgetBuilder> routes = {
     wrapper: (_) => Wrapper(),
@@ -23,6 +26,9 @@ class Routes {
 
     dashboard: (_) => DashboardScreen(),
     chat: (_) => ChatScreen(),
+
     profile: (_) => ProfileScreen(),
+    upgrade: (_) => UpgradeProfileScreen(),
+    editProfile: (_) => EditProfileScreen(),
   };
 }

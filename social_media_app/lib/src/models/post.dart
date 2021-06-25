@@ -36,7 +36,12 @@ class PostItem {
   final PostStatus status;
   final String uid;
 
-  /// `dart` 
+  /// ```dart
+  /// Map<String, Object> postedBy = {
+  ///   POST_USER_NAME: username,
+  ///   POST_IMG_URL: userProfilePic,
+  /// }
+  /// ```
   final Map<String, Object> postedBy;
   final Timestamp timestamp;
 
