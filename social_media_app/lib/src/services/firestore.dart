@@ -12,6 +12,7 @@ class FirestoreService {
     'super_admin',  // LEVEL 4
   ];
   static const POSTS = 'posts';
+  static const REQUEST = 'requests';
 
   static final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   String _resolveUserCollection(int level) => _COLLECTION[level-1];
@@ -45,6 +46,28 @@ class FirestoreService {
           .get(GetOptions(source: Source.serverAndCache))
           .timeout(Duration(seconds: 20));
       return Result(code: Code.SUCCESS, data: doc.docs);
+    } on FirebaseException catch (e) {
+      return Result(code: Code.FIREBASEAUTH_EXCEPTION, message: e.message);
+    } on SocketException catch (e) {
+      return Result(code: Code.SOCKET_EXCEPTION, message: e.message);
+    } on PlatformException catch (e) {
+      return Result(code: Code.PLATFORM_EXCEPTION, message: e.message);
+    } on TimeoutException catch (e) {
+      return Result(code: Code.TIMEOUT_EXCEPTION, message: e.message);
+    } catch (e) {
+      return Result(code: Code.EXCEPTION, message: e.toString());
+    }
+  }
+
+  Future<Result> postUpgradeRequest({String uid, String phone, String address, String docLink, int level}) async {
+    try {
+      var doc = await _firestore.collection(REQUEST).doc(uid).set({
+        'phone': phone,
+        'address': address,
+        'docLink': docLink,
+        'level': level,
+      }).timeout(Duration(seconds: 20));
+      return Result(code: Code.SUCCESS, message: 'Request Added Successfully');
     } on FirebaseException catch (e) {
       return Result(code: Code.FIREBASEAUTH_EXCEPTION, message: e.message);
     } on SocketException catch (e) {
