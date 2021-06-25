@@ -1,5 +1,5 @@
 String validateEmail(String email) {
-  if (email.isEmpty)
+  if (email == null || email.isEmpty)
     return 'This is a required field';
 
   String pattern = r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$';
@@ -9,7 +9,7 @@ String validateEmail(String email) {
 }
 
 String validateName(String name) {
-  if (name.isEmpty)
+  if (name == null || name.isEmpty)
     return 'This is a required field';
   if (name.contains(RegExp(r'[0-9]')))
     return 'Numbers not allowed';
@@ -17,6 +17,8 @@ String validateName(String name) {
 }
 
 String validatePassword(String password) {
+  if (password == null || password.isEmpty)
+    return 'This is a required field';
   if (password.length < 8)
     return 'Password should be atleast of 8 characters';
   if (!password.contains(RegExp(r'[0-9]')))
@@ -29,7 +31,7 @@ String validatePassword(String password) {
 }
 
 String requiredFormField(String text) {
-  if (text.isEmpty)
+  if (text == null || text.isEmpty)
     return 'This is a required field';
   return null;
 }

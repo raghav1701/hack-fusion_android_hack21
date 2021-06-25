@@ -1,3 +1,6 @@
 library views;
 
-export 'home.dart';
+export 'welcome.dart';
+export 'signup.dart';
+export 'signin.dart';
+export 'dashboard.dart';

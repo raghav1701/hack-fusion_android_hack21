@@ -27,7 +27,7 @@ class _MyAppState extends State<MyApp> {
       theme: lightTheme,
       darkTheme: darkTheme,
       themeMode: currentAppTheme.themeMode,
-      initialRoute: Routes.home,
+      initialRoute: Routes.wrapper,
       routes: Routes.routes,
     );
   }

@@ -8,3 +8,4 @@ export 'src/shared/shared.dart';
 export 'src/themes/theme.dart';
 export 'src/views/views.dart';
 export 'src/widgets/widgets.dart';
+export 'src/wrapper.dart';
