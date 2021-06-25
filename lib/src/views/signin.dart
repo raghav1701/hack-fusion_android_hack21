@@ -49,6 +49,10 @@ class _SigninScreenState extends State<SigninScreen> {
     await service.loginUser();
   }
 
+  void handleForgotPassword() {
+
+  }
+
   void handleButton() {
     Navigator.of(context).pushReplacementNamed(Routes.signup);
   }
@@ -127,6 +131,13 @@ class _SigninScreenState extends State<SigninScreen> {
                 AuthButton(
                   title: 'LOGIN',
                   onPressed: saveForm,
+                ),
+                InteractiveText(
+                  text: 'Forgot Password?',
+                  onTap: handleForgotPassword,
+                ),
+                SizedBox(
+                  height: 16.0,
                 ),
                 InteractiveText(
                   text: 'Don\'t have an account? Signup Now',

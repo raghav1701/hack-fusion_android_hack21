@@ -10,8 +10,7 @@ class Wrapper extends StatefulWidget {
 
 class _WrapperState extends State<Wrapper> {
   void initTools() {
-    Firebase.initializeApp().then((value) async {
-      // await FirebaseAuth.instance.signOut();
+    Firebase.initializeApp().then((value) {
       if (FirebaseAuth.instance.currentUser == null) {
         Navigator.of(context).pushReplacementNamed(Routes.welcome);
       } else {

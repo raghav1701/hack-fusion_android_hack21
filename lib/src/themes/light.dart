@@ -13,17 +13,18 @@ ThemeData lightTheme = ThemeData.light().copyWith(
   ),
 
   bottomNavigationBarTheme: BottomNavigationBarThemeData(
+    type: BottomNavigationBarType.fixed,
+    showSelectedLabels: false,
+    showUnselectedLabels: false,
     selectedItemColor: Colors.blue.shade700,
     unselectedItemColor: Colors.grey.shade600,
     selectedLabelStyle: GoogleFonts.poppins(
       fontSize: 11.0,
       fontWeight: FontWeight.w500,
-      letterSpacing: -0.2
     ),
     unselectedLabelStyle: GoogleFonts.poppins(
       fontSize: 11.0,
       fontWeight: FontWeight.w500,
-      letterSpacing: -0.2
     ),
   ),
 

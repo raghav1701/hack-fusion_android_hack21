@@ -9,6 +9,8 @@ class Routes {
   static const signin = '$welcome/signin';
   static const signup = '$welcome/signup';
   static const dashboard = '/dashboard';
+  static const chat = '$dashboard/chat';
+  static const profile = '$dashboard/profile';
 
   static Map<String, WidgetBuilder> routes = {
     wrapper: (_) => Wrapper(),
@@ -16,5 +18,7 @@ class Routes {
     signup: (_) => SignupScreen(),
     signin: (_) => SigninScreen(),
     dashboard: (_) => DashboardScreen(),
+    chat: (_) => ChatScreen(),
+    profile: (_) => ProfileScreen(),
   };
 }

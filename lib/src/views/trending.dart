@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-class Home extends StatelessWidget {
+class TrendingPosts extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
