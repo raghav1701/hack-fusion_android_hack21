@@ -22,10 +22,10 @@ class _SigninScreenState extends State<SigninScreen> {
     if (!formKey.currentState.validate()) return;
     formKey.currentState.save();
     FocusScope.of(context).unfocus();
-    handleSignUp();
+    handleSignIn();
   }
 
-  void handleSignUp() async {
+  void handleSignIn() async {
     var service = FirebaseAuthService(
       email: email,
       password: password,
@@ -35,8 +35,10 @@ class _SigninScreenState extends State<SigninScreen> {
           progressDialog.show();
         }
       },
-      onFinish: (user) {
-        progressDialog.hide();
+      onFinish: (user) async {
+        await progressDialog.hide();
+        var result = await FirestoreService.getRole(user?.uid);
+        await sharedPreferences.saveUserRole(level: int.tryParse(result.message));
         Navigator.of(context).pushNamedAndRemoveUntil(Routes.dashboard, (route) => false);
       },
       onError: (code, message) {

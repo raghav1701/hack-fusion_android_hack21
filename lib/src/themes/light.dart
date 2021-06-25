@@ -1,5 +1,3 @@
-import 'dart:ui';
-
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -15,6 +13,18 @@ ThemeData lightTheme = ThemeData.light().copyWith(
   ),
 
   primaryColor: Color(0xFF10B73F),
+  primaryColorLight: Color(0xFF10CF3F),
+
+  appBarTheme: AppBarTheme(
+    textTheme: TextTheme(
+      headline6: TextStyle(
+        color: Colors.white,
+        fontSize: 20.0,
+        fontFamily: GoogleFonts.poppins().fontFamily,
+        fontWeight: FontWeight.w600,
+      ),
+    ),
+  ),
 
   bottomNavigationBarTheme: BottomNavigationBarThemeData(
     type: BottomNavigationBarType.fixed,

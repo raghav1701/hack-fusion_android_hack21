@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 
-class Home extends StatelessWidget {
+class Statistics extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
       child: Center(
-        child: Text('Home'),
+        child: Text('Statistics'),
       ),
     );
   }

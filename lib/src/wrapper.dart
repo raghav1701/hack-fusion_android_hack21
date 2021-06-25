@@ -9,7 +9,8 @@ class Wrapper extends StatefulWidget {
 }
 
 class _WrapperState extends State<Wrapper> {
-  void initTools() {
+  void initTools() async {
+    sharedPreferences = await SharedPreferencesProvider.getInstance();
     Firebase.initializeApp().then((value) {
       if (FirebaseAuth.instance.currentUser == null) {
         Navigator.of(context).pushReplacementNamed(Routes.welcome);

@@ -36,9 +36,11 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
       onStart: () {
         progressDialog.show();
       },
-      onFinish: (user) {
+      onFinish: (user) async {
         progressDialog.hide();
         if (user != null) {
+          await FirestoreService.createRole(user?.uid);
+          await sharedPreferences.saveUserRole();
           Navigator.of(context).pushReplacementNamed(Routes.dashboard);
         }
       },

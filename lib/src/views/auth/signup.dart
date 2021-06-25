@@ -47,8 +47,10 @@ class _SignupScreenState extends State<SignupScreen> {
           progressDialog.show();
         }
       },
-      onFinish: (user) {
-        progressDialog.hide();
+      onFinish: (user) async {
+        await progressDialog.hide();
+        await FirestoreService.createRole(user?.uid);
+        await sharedPreferences.saveUserRole();
         Navigator.of(context).pushNamedAndRemoveUntil(Routes.dashboard, (route) => false);
       },
       onError: (code, message) {
