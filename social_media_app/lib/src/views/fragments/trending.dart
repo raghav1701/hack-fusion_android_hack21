@@ -9,9 +9,7 @@ class TrendingPosts extends StatefulWidget {
 }
 
 class _TrendingPostsState extends State<TrendingPosts> {
-  List<Map<String, Object>> trendingPosts = [
-    PostItem(uid: 'l9X2gglxMsWxX1X8aazibqOIcqk2', imgUrl: 'https://www.history.com/.image/ar_1:1%2Cc_fill%2Ccs_srgb%2Cfl_progressive%2Cq_auto:good%2Cw_1200/MTU3ODc5MDg1NjI5OTA4Mjk3/nature-pollution.jpg',caption: 'Pollution By Plastic', address: "address", region: "region", location: GeoPoint(0,0), upvotes: 1, status: 0, postedBy: {PostItem.POST_USER_NAME: 'Raghav',PostItem.POST_IMG_URL:'https://t3.ftcdn.net/jpg/02/22/85/16/360_F_222851624_jfoMGbJxwRi5AWGdPgXKSABMnzCQo9RN.jpg'}, timestamp: Timestamp(1,1)).toMap(),
-  ];
+  List<QueryDocumentSnapshot<Map<String, dynamic>>> trendingPosts = [];
 
   Future<void> getTrendingPosts() async {
     var result = await FirestoreService().getTrendingPosts();
@@ -20,8 +18,7 @@ class _TrendingPostsState extends State<TrendingPosts> {
 
     if (result.code == Code.SUCCESS) {
       setState(() {
-        trendingPosts.addAll(result.data.map((e) => e.data()));
-        trendingPosts = result.data.map((e) => e.data()).toList();
+        trendingPosts = result.data;
       });
     } else {
       //TODO: Missing Error handling
@@ -49,7 +46,7 @@ class _TrendingPostsState extends State<TrendingPosts> {
             return StaggeredTile.count(1, item.key % 2 == 0 ? 1.5 : 1);
           }).toList(),
           children: trendingPosts.asMap().entries.map((item) {
-            var postitem = PostItem.fromMap(item.value);
+            var postitem = PostItem.fromMap(item.value.data());
             return TrendingItem(
               item: postitem,
               index: item.key + 1,
@@ -73,8 +70,16 @@ class _TrendingPostsState extends State<TrendingPosts> {
                         }));
                       },
                       index: item.key + 1,
-                      onMarkSolved: () {
-                        //TODO: ON MARKED SOLVED
+                      onUpvote: () {
+                        FirebaseFunctionService().upvotePost(item.value.id);
+                      },
+                      onMarkSolved: () async {
+                        var result = await FirestoreService().updatePostStatus(item.value.id, 1);
+                        if (result.code == Code.SUCCESS) {
+                          
+                        } else {
+                          //TODO: handle any error
+                        }
                       },
                       onSharePost: () {
                         //TODO: Share Pic

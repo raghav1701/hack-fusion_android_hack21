@@ -20,7 +20,7 @@ class DashboardScreen extends StatefulWidget {
   final higherAuthorityUser = [
     Destination(title: 'Trending', icon: FontAwesomeIcons.search, widget: TrendingPosts()),
     Destination(title: 'Requests', icon: FontAwesomeIcons.accessibleIcon, widget: RequestApprovalScreen(2)),
-    Destination(title: 'NGOs Connect', icon: FontAwesomeIcons.search, widget: NGOs()),
+    Destination(title: 'NGOs Connect', icon: FontAwesomeIcons.hands, widget: NGOs()),
     Destination(title: 'Statistics', icon: FontAwesomeIcons.chartLine, widget: Statistics()),
   ];
 

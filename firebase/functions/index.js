@@ -130,11 +130,11 @@ exports.upvote = functions.https.onCall(async (data, context) => {
 
   var userData = await userDoc.get();
 
-  if (userData.upvotedOn.includes(postId)) {
+  if (userData.data().upvotedOn.includes(postId)) {
     return 'Already Liked';
   } else {
-    await doc.update({
-      upvotedOn: admin.firestore.FieldValue.arrayUnion([postId]),
+    await userDoc.update({
+      upvotedOn: [...userData.data().upvotedOn, postId],
     });
     return postDoc.update({
       upvotes: admin.firestore.FieldValue.increment(1),

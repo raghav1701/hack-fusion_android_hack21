@@ -83,10 +83,19 @@ class TrendItemDialog extends StatelessWidget {
     this.onUpvote,
   }) : super(key: key);
 
-  final menuItems = const ['View User', 'Share', 'Mark as Solved'];
-
   @override
   Widget build(BuildContext context) {
+    var level = sharedPreferences.authLevel;
+    List<String> menuItems;
+
+    if (level == 1 || level == 3) {
+      menuItems = const ['View User', 'Share'];
+    } else if (level == 2) {
+      menuItems = const ['View User', 'Share', 'Mark as Solved'];
+    } else {
+      menuItems = const ['View User', 'Share', 'Mark as Solved'];
+    }
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       mainAxisSize: MainAxisSize.min,

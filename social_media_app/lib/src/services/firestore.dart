@@ -124,4 +124,26 @@ class FirestoreService {
       return Result(code: Code.EXCEPTION, message: e.toString());
     }
   }
+
+  Future<Result> updatePostStatus(String postId, int status) async {
+    try {
+      await _firestore
+          .collection(POSTS)
+          .doc(postId)
+          .update({
+            PostItem.STATUS: status,
+          }).timeout(Duration(seconds: 10));
+      return Result(code: Code.SUCCESS);
+    } on FirebaseException catch (e) {
+      return Result(code: Code.FIREBASEAUTH_EXCEPTION, message: e.message);
+    } on SocketException catch (e) {
+      return Result(code: Code.SOCKET_EXCEPTION, message: e.message);
+    } on PlatformException catch (e) {
+      return Result(code: Code.PLATFORM_EXCEPTION, message: e.message);
+    } on TimeoutException catch (e) {
+      return Result(code: Code.TIMEOUT_EXCEPTION, message: e.message);
+    } catch (e) {
+      return Result(code: Code.EXCEPTION, message: e.toString());
+    }
+  }
 }

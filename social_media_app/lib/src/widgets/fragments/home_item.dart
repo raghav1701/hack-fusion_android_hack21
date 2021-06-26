@@ -11,6 +11,8 @@ class MyPost extends StatelessWidget {
     this.item,
     this.onProfileTap,
     this.onMarkSolved,
+    this.onMarkClose,
+    this.onMarkFake,
     this.onShare,
     this.onGetDirections,
     this.onUpvote,
@@ -19,14 +21,37 @@ class MyPost extends StatelessWidget {
   final PostItem item;
   final Function onProfileTap;
   final Function onMarkSolved;
+  final Function onMarkClose;
+  final Function onMarkFake;
   final Function onShare;
   final Function onGetDirections;
   final Function onUpvote;
 
-  final menuItems = const ['Get Directions', 'Mark as Solved', 'Share'];
+  void handlePopupMenu(String val) {
+    if (val == 'Get Directions') {
+      onGetDirections();
+    } else if (val == 'Mark as Solved') {
+      onMarkSolved();
+    } else if (val == 'Share') {
+      onShare();
+    } else {
+      onMarkClose();
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
+    var level = sharedPreferences.authLevel;
+    List<String> menuItems;
+
+    if (level == 1) {
+      menuItems = const ['Get Directions', 'Share'];
+    } else if (level == 2) {
+      menuItems = const ['Get Directions', 'Mark as Solved', 'Share'];
+    } else {
+      menuItems = const ['Get Directions', 'Close Issue', 'Share'];
+    }
+
     return Container(
       margin: const EdgeInsets.symmetric(vertical: 16, horizontal: 24),
       height: kScreenHeight * 0.4,
@@ -36,8 +61,9 @@ class MyPost extends StatelessWidget {
             borderRadius: BorderRadius.all(Radius.circular(borderRadius)),
             child: CachedNetworkImage(
               imageUrl: item.imgUrl,
+              height: kScreenHeight * 0.4,
               width: double.infinity,
-              fit: BoxFit.fitWidth,
+              fit: BoxFit.fill,
             ),
           ),
           Container(
@@ -59,27 +85,20 @@ class MyPost extends StatelessWidget {
               ),
               title: Text(item.postedBy[PostItem.POST_USER_NAME]),
               subtitle: Text(
-                item.address,
+                item.address + ', ' + item.region,
+                maxLines: 1,
                 style: TextStyle(color: Colors.white),
               ),
-              trailing: PopupMenuButton(
+              trailing: PopupMenuButton<String>(
                 child: Icon(Icons.more_vert, color: Colors.white),
                 itemBuilder: (context) {
                   return menuItems.map((e) {
-                    return PopupMenuItem(
+                    return PopupMenuItem<String>(
                       child: Text(e),
                     );
                   }).toList();
                 },
-                onSelected: (val) {
-                  if (val == menuItems[0]) {
-                    onGetDirections();
-                  } else if (val == menuItems[1]) {
-                    onMarkSolved();
-                  } else {
-                    onShare();
-                  }
-                },
+                onSelected: handlePopupMenu,
               ),
               visualDensity: VisualDensity(vertical: -4.0),
             ),
@@ -128,6 +147,8 @@ class MyPost extends StatelessWidget {
                       Expanded(
                         child: Text(
                           item.caption,
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
                           style: TextStyle(
                             fontSize: 15,
                             color: Colors.white,

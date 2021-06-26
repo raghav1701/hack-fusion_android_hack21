@@ -1,4 +1,3 @@
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:social_media_app/social_media.dart';
@@ -13,25 +12,40 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
-  // List<Map<String, Object>> items = [
-  // PostItem(uid: 'l9X2gglxMsWxX1X8aazibqOIcqk2', imgUrl: 'https://www.history.com/.image/ar_1:1%2Cc_fill%2Ccs_srgb%2Cfl_progressive%2Cq_auto:good%2Cw_1200/MTU3ODc5MDg1NjI5OTA4Mjk3/nature-pollution.jpg',caption: 'Pollution By Plastic', address: "address", region: "region", location: GeoPoint(0,0), upvotes: 1, status: PostStatus.Pending, postedBy: {PostItem.POST_USER_NAME: 'Raghav',PostItem.POST_IMG_URL:'https://t3.ftcdn.net/jpg/02/22/85/16/360_F_222851624_jfoMGbJxwRi5AWGdPgXKSABMnzCQo9RN.jpg'}, timestamp: Timestamp(1,1)).toMap(),
-  // PostItem(uid: 'l9X2gglxMsWxX1X8aazibqOIcqk2', imgUrl: 'https://images.unsplash.com/photo-1564608938148-e3c5325907ee?ixid=MnwxMjA3fDB8MHxzZWFyY2h8MXx8cG9sbHV0aW9ufGVufDB8fDB8fA%3D%3D&ixlib=rb-1.2.1&w=1000&q=80', caption: 'Air pollution  ', address: "address", region: "region", location: GeoPoint(0,0), upvotes: 5, status: PostStatus.Pending, postedBy: {PostItem.POST_USER_NAME: 'Piyush',PostItem.POST_IMG_URL:'https://t3.ftcdn.net/jpg/02/22/85/16/360_F_222851624_jfoMGbJxwRi5AWGdPgXKSABMnzCQo9RN.jpg'}, timestamp: Timestamp(1,1)).toMap()];
+  Query<Map<String, dynamic>> stream;
+
+  @override
+  void initState() {
+    super.initState();
+    var level = sharedPreferences.authLevel;
+    if (level == 1) {
+      stream = FirebaseFirestore.instance.collection("posts").where(PostItem.STATUS, isLessThanOrEqualTo: 1);
+    } else if (level == 2) {
+      stream = FirebaseFirestore.instance.collection("posts").where(PostItem.STATUS, isEqualTo: 0);
+    } else if (level == 3) {
+      stream = FirebaseFirestore.instance.collection("posts").where(PostItem.STATUS, isEqualTo: 1);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
     return Container(
       child: StreamBuilder<QuerySnapshot>(
-        stream : FirebaseFirestore.instance.collection("posts").snapshots(),
+        stream : stream.snapshots(),
         builder: (context,snapshot){
           if(!snapshot.hasData){
             return CircularProgressIndicator();
           }
+          if (snapshot.data.size == 0) {
+            return Center(
+              child: Text('No Posts'),
+            );
+          }
           return ListView.builder(
             itemCount: snapshot.data.size,
             itemBuilder: (context, index){
-              DocumentSnapshot doc=snapshot.data.docs[index];
-              PostItem item=PostItem(uid: doc[PostItem.POSTED_BY], imgUrl: doc[PostItem.IMG_URL], caption: doc[PostItem.CAPTION], address: doc[PostItem.ADDRESS], region: doc[PostItem.REGION], location: doc[PostItem.LOCATION], upvotes: doc[PostItem.UPVOTES], status: doc[PostItem.STATUS], postedBy: doc[PostItem.POSTED_BY_USER], timestamp: doc[PostItem.TIMESTAMP]);
-              //var postItem = PostItem.fromMap(items[index]);
+              var doc = snapshot.data.docs[index];
+              var item = PostItem.fromMap(doc.data());
               return MyPost(
                 item: item,
                 onProfileTap: () {
@@ -44,8 +58,32 @@ class _HomeState extends State<Home> {
                     );
                   }));
                 },
-                onMarkSolved: () {
-                  //TODO: ON MARKED SOLVED
+                onUpvote: () {
+                  FirebaseFunctionService().upvotePost(doc.id);
+                },
+                onMarkSolved: () async {
+                  var result = await FirestoreService().updatePostStatus(doc.id, 1);
+                  if (result.code == Code.SUCCESS) {
+
+                  } else {
+                    //TODO: handle any error
+                  }
+                },
+                onMarkClose: () async {
+                  var result = await FirestoreService().updatePostStatus(doc.id, 2);
+                  if (result.code == Code.SUCCESS) {
+
+                  } else {
+                    //TODO: handle any error
+                  }
+                },
+                onMarkFake: () async {
+                  var result = await FirestoreService().updatePostStatus(doc.id, 3);
+                  if (result.code == Code.SUCCESS) {
+
+                  } else {
+                    //TODO: handle any error
+                  }
                 },
                 onGetDirections: () {
                   //TODO: Get Directions

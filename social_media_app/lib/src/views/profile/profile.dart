@@ -313,7 +313,14 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     child: OutlinedButton(
                       child: Text('Add Post'),
                       onPressed: () {
-                        //TODO: Navigate to Add Post picl
+                        Navigator.of(context).push(MaterialPageRoute(builder: (context) {
+                          return Scaffold(
+                            appBar: AppBar(
+                              title: Text('Add Post'),
+                            ),
+                            body: AddPost(context),
+                          );
+                        }));
                       },
                     ),
                   )
