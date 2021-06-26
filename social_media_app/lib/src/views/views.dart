@@ -9,8 +9,7 @@ export 'dashboard.dart';
 export 'about.dart';
 
 // lv2 and lv3 ui fragments
-export 'admin/approve_lv2.dart';
-export 'admin/approve_lv3.dart';
+export 'admin/approve_users.dart';
 export 'admin/verify_solved_issue.dart';
 
 // chat screen
