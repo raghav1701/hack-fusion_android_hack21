@@ -3,8 +3,13 @@ import 'package:flutter/material.dart';
 class EditProfileScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Container(
-
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Edit Profile'),
+      ),
+      body: Center(
+        child: Text('Coming Soon'),
+      ),
     );
   }
 }

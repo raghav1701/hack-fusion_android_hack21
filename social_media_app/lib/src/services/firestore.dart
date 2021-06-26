@@ -59,14 +59,13 @@ class FirestoreService {
     }
   }
 
-  Future<Result> postUpgradeRequest({String uid, String phone, String address, String docLink, int level}) async {
+  Future<Result> postUpgradeRequest({String uid, RequestItem info}) async {
     try {
-      var doc = await _firestore.collection(REQUEST).doc(uid).set({
-        'phone': phone,
-        'address': address,
-        'docLink': docLink,
-        'level': level,
-      }).timeout(Duration(seconds: 20));
+      var doc = await _firestore
+          .collection(REQUEST)
+          .doc(uid)
+          .set(info.toMap())
+          .timeout(Duration(seconds: 20));
       return Result(code: Code.SUCCESS, message: 'Request Added Successfully');
     } on FirebaseException catch (e) {
       return Result(code: Code.FIREBASEAUTH_EXCEPTION, message: e.message);
