@@ -29,7 +29,7 @@ exports.userSignup = functions.auth.user().onCreate(async (user) => {
     upvotedOn: [],
   });
 
-  if (user.email === 'superAdmin@mail.com') {
+  if (user.email === 'superadmin@mail.com') {
     return admin.auth().setCustomUserClaims(user.uid, {
       accessLevel: 4,
     });
@@ -42,13 +42,11 @@ exports.userSignup = functions.auth.user().onCreate(async (user) => {
 
 // cloud firestore trigger (new post added)
 exports.newPost = functions.firestore.document(collections.posts + '/{docId}').onCreate(async (snapshot, context) => {
-  var uid = context.auth.uid;
-  var user = await admin.auth().getUser(uid);
-  var claims = user.customClaims;
-  var collection = resolveUserCollection(claims);
-  var doc = admin.firestore().collection(collection).doc(uid);
+  var uid = snapshot.data().uid;
+  var doc = admin.firestore().collection(collections.level[1]).doc(uid);
   return doc.update({
     posts: admin.firestore.FieldValue.increment(1),
+    updated: admin.firestore.Timestamp.now(),
   });
 });
 
@@ -94,6 +92,8 @@ exports.upgrade = functions.https.onCall(async (data, context) => {
     xp: clientActivityInfo.data().xp,
     upvotedOn: clientActivityInfo.data().upvotedOn,
     updated: admin.firestore.Timestamp.now(),
+    name: upgradeRequestInfo.data().name,
+    email: upgradeRequestInfo.data().email,
     phone: upgradeRequestInfo.data().phone,
     address: upgradeRequestInfo.data().address,
     docLink: upgradeRequestInfo.data().docLink,
