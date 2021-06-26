@@ -176,7 +176,7 @@ class _MakePostState extends State<MakePost> {
           duration: Duration(seconds: 2),
           snackPosition: SnackPosition.BOTTOM,
         );
-        Navigator.of(context).push(MaterialPageRoute(builder: (context) => Home()));
+        Navigator.of(context).push(MaterialPageRoute(builder: (context) => Home(context)));
       });
     }
     catch(e){

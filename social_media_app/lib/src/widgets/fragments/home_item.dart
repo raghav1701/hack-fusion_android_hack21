@@ -1,14 +1,29 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:social_media_app/social_media.dart';
 import 'package:social_media_app/src/models/models.dart';
 import 'package:social_media_app/src/shared/constants.dart';
 
 class MyPost extends StatelessWidget {
   static const borderRadius = 16.0;
 
-  MyPost(this.item);
+  const MyPost({
+    this.item,
+    this.onProfileTap,
+    this.onMarkSolved,
+    this.onShare,
+    this.onGetDirections,
+    this.onUpvote,
+  });
 
   final PostItem item;
+  final Function onProfileTap;
+  final Function onMarkSolved;
+  final Function onShare;
+  final Function onGetDirections;
+  final Function onUpvote;
+
+  final menuItems = const ['Get Directions', 'Mark as Solved', 'Share'];
 
   @override
   Widget build(BuildContext context) {
@@ -35,22 +50,37 @@ class MyPost extends StatelessWidget {
               ),
             ),
             child: ListTile(
-              leading: CircleAvatar(
-                backgroundImage: CachedNetworkImageProvider(
-                    item.postedBy[PostItem.POST_IMG_URL]),
+              leading: TapDetector(
+                onTap: onProfileTap,
+                child: CircleAvatar(
+                  backgroundImage: CachedNetworkImageProvider(
+                      item.postedBy[PostItem.POST_IMG_URL]),
+                ),
               ),
               title: Text(item.postedBy[PostItem.POST_USER_NAME]),
-              subtitle:
-                  Text(item.address, style: TextStyle(color: Colors.white)),
+              subtitle: Text(
+                item.address,
+                style: TextStyle(color: Colors.white),
+              ),
               trailing: PopupMenuButton(
-                  child: Icon(Icons.more_vert, color: Colors.white),
-                  itemBuilder: (context) {
-                    return ['Share', 'Mark as Solved'].map((e) {
-                      return PopupMenuItem(
-                        child: Text(e),
-                      );
-                    }).toList();
-                  }),
+                child: Icon(Icons.more_vert, color: Colors.white),
+                itemBuilder: (context) {
+                  return menuItems.map((e) {
+                    return PopupMenuItem(
+                      child: Text(e),
+                    );
+                  }).toList();
+                },
+                onSelected: (val) {
+                  if (val == menuItems[0]) {
+                    onGetDirections();
+                  } else if (val == menuItems[1]) {
+                    onMarkSolved();
+                  } else {
+                    onShare();
+                  }
+                },
+              ),
               visualDensity: VisualDensity(vertical: -4.0),
             ),
           ),
@@ -80,7 +110,8 @@ class MyPost extends StatelessWidget {
                               child: IconButton(
                                 icon: Icon(Icons.thumb_up_outlined),
                                 color: Colors.white,
-                                onPressed: () {},
+                                splashRadius: 24.0,
+                                onPressed: onUpvote ?? () {},
                               ),
                             ),
                             Text(

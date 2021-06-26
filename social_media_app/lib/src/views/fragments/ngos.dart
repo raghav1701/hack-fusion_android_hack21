@@ -21,16 +21,8 @@ class NGOs extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(
-          "NGO Connect",
-          style: TextStyle(color: Colors.green),
-        ),
-        elevation: 3,
-        backgroundColor: Colors.white,
-      ),
-      body: ListView.builder(
+    return Container(
+      child: ListView.builder(
         itemCount: titleList.length,
         itemBuilder: (context, index) {
           return GestureDetector(

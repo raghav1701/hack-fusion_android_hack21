@@ -89,7 +89,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('My Profile'),
+        title: Text(isCurrentAuthUser ? 'My Profile' : '${name.split(' ').first}\'s Profile'),
       ),
       body: RefreshIndicator(
         onRefresh: () async {},
@@ -273,18 +273,23 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     children: [
                       Expanded(
                         child: Text(
-                          'You haven\'t not posted anything in a while',
+                          isCurrentAuthUser
+                            ? 'You haven\'t not posted anything in a while'
+                            : 'This user hasn\'t posted anything yet',
                           textAlign: TextAlign.center,
                         ),
                       ),
                     ],
                   ),
                   SizedBox(height: 8.0),
-                  OutlinedButton(
-                    child: Text('Add Post'),
-                    onPressed: () {
-                      //TODO: Navigate to Add Post picl
-                    },
+                  Visibility(
+                    visible: isCurrentAuthUser,
+                    child: OutlinedButton(
+                      child: Text('Add Post'),
+                      onPressed: () {
+                        //TODO: Navigate to Add Post picl
+                      },
+                    ),
                   )
                 ],
               ),

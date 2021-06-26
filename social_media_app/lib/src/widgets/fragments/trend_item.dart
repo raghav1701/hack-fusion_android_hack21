@@ -69,15 +69,21 @@ class TrendItemDialog extends StatelessWidget {
   final PostItem item;
   final int index;
   final Function profileTap;
-  final Function markSolved;
+  final Function onMarkSolved;
+  final Function onSharePost;
+  final Function onUpvote;
 
   const TrendItemDialog({
     Key key,
     @required this.item,
     @required this.index,
+    this.onSharePost,
     this.profileTap,
-    this.markSolved,
+    this.onMarkSolved,
+    this.onUpvote,
   }) : super(key: key);
+
+  final menuItems = const ['View User', 'Share', 'Mark as Solved'];
 
   @override
   Widget build(BuildContext context) {
@@ -94,12 +100,22 @@ class TrendItemDialog extends StatelessWidget {
           trailing: PopupMenuButton(
             child: Icon(Icons.more_vert),
             itemBuilder: (context) {
-              return ['View User', 'Share', 'Mark as Solved'].map((e) {
+              return menuItems.map((e) {
                 return PopupMenuItem(
                   child: Text(e),
+                  value: e,
                 );
               }).toList();
-            }
+            },
+            onSelected: (val) {
+              if (val == menuItems[0]) {
+                profileTap();
+              } else if (val == menuItems[1]) {
+                onMarkSolved();
+              } else {
+                onSharePost();
+              }
+            },
           ),
         ),
         Padding(
@@ -116,9 +132,31 @@ class TrendItemDialog extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
+              Row(
+                children: [
+                  Expanded(child: Text('Trending: $index')),
+                  SizedBox(
+                    width: 36.0,
+                    child: IconButton(
+                      icon: Icon(Icons.thumb_up_outlined),
+                      color: Theme.of(context).primaryColor,
+                      splashRadius: 24.0,
+                      onPressed: onUpvote ?? () {},
+                    ),
+                  ),
+                  Text(
+                    ' ${item.upvotes}',
+                    style: TextStyle(
+                      fontSize: 15,
+                      fontWeight: FontWeight.bold,
+                      color: Theme.of(context).primaryColor,
+                    ),
+                  ),
+                ],
+              ),
               Text(item.caption),
-              Text('Trending: $index'),
               Text('Updated: ' + convertTimestampToReadable(item.timestamp)),
+              SizedBox(height: 8.0),
             ],
           ),
         ),

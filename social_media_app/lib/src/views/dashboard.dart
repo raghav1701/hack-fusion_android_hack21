@@ -7,22 +7,19 @@ import 'package:social_media_app/src/views/fragments/stats.dart';
 
 class DashboardScreen extends StatefulWidget {
   final regularUsers = [
-    Destination(title: 'Home', icon: FontAwesomeIcons.home, widget: Home()),
     Destination(title: 'Trending', icon: FontAwesomeIcons.search, widget: TrendingPosts()),
-    Destination(title: 'NGOs', icon: FontAwesomeIcons.hands, widget: NGOs()),
+    Destination(title: 'NGOs Connect', icon: FontAwesomeIcons.hands, widget: NGOs()),
     Destination(title: 'Statistics', icon: FontAwesomeIcons.chartLine, widget: Statistics()),
   ];
 
   final authorisedUsers = [
-    Destination(title: 'Home', icon: Icons.home, widget: Home()),
     Destination(title: 'Trending', icon: FontAwesomeIcons.search, widget: TrendingPosts()),
     Destination(title: 'Statistics', icon: FontAwesomeIcons.chartLine, widget: Statistics()),
   ];
 
   final higherAuthorityUser = [
-    Destination(title: 'Home', icon: Icons.home, widget: Home()),
     Destination(title: 'Trending', icon: FontAwesomeIcons.search, widget: TrendingPosts()),
-    Destination(title: 'NGOs', icon: FontAwesomeIcons.search, widget: NGOs()),
+    Destination(title: 'NGOs Connect', icon: FontAwesomeIcons.search, widget: NGOs()),
     Destination(title: 'Statistics', icon: FontAwesomeIcons.chartLine, widget: Statistics()),
   ];
 
@@ -35,8 +32,6 @@ class DashboardScreen extends StatefulWidget {
 }
 
 class _DashboardScreenState extends State<DashboardScreen> {
-
-  BuildContext mycontext;
   List<Destination> bottomBarItems;
   int tabSelected = 0;
 
@@ -54,6 +49,11 @@ class _DashboardScreenState extends State<DashboardScreen> {
     var level = sharedPreferences.authLevel;
     switch (level) {
       case 1: bottomBarItems = widget.regularUsers;
+        bottomBarItems.insert(1, Destination(
+          title: 'Post',
+          icon: FontAwesomeIcons.plusSquare,
+          widget: AddPost(context),
+        ));
         break;
       case 2: bottomBarItems = widget.authorisedUsers;
         break;
@@ -63,12 +63,19 @@ class _DashboardScreenState extends State<DashboardScreen> {
         break;
       default: bottomBarItems = widget.regularUsers;
     }
+    if (level < 4) {
+      bottomBarItems.insert(0, Destination(
+        title: 'Local Posts',
+        icon: FontAwesomeIcons.home,
+        widget: Home(context),
+      ));
+    }
     _controller = PersistentTabController(initialIndex: 0);
+    _controller.addListener(() => setState(() {}));
   }
 
   @override
   Widget build(BuildContext context) {
-    mycontext=context;
     return Scaffold(
       appBar: AppBar(
         title: Text(bottomBarItems[_controller.index].title),
@@ -125,9 +132,6 @@ class _DashboardScreenState extends State<DashboardScreen> {
   }
 
   List<Widget> _buildScreens() {
-    if (bottomBarItems == widget.regularUsers) {
-      bottomBarItems.insert(2, Destination(title: 'Post', icon: FontAwesomeIcons.plusSquare, widget: AddPost(mycontext: mycontext,)));
-    }
     return bottomBarItems.map((e) => e.widget).toList();
   }
 
