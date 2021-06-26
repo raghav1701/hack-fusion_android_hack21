@@ -1,3 +1,4 @@
+import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:social_media_app/social_media.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
@@ -18,21 +19,17 @@ var titleList = [
   "Allahabad",
   "Lucknow",
   "Pune",
-  "Mumbai",
-  "Himachal",
-  "Haryana"
+  "Mumbai"
 ];
 var imageList = [
-  "images/login.png",
-  "images/login.png",
-  "images/login.png",
-  "images/login.png",
-  "images/login.png",
-  "images/login.png",
-  "images/login.png",
-  "images/login.png",
-  "images/login.png",
-  "images/login.png"
+  "images/punjab.jpeg",
+  "images/ghaziabad.jpeg",
+  "images/delhi.jpeg",
+  "images/chennai.jpeg",
+  "images/allahabad.jpeg",
+  "images/lucknow.jpeg",
+  "images/pune.png",
+  "images/mumbai.png"
 ];
 
 // ignore: camel_case_types
@@ -103,7 +100,7 @@ class _GraphPlotState extends State<GraphPlot> {
     return SafeArea(
         child: Scaffold(
             body: SfCircularChart(
-      title: ChartTitle(text: 'Title'),
+      title: ChartTitle(text: 'Regional Statistics'),
       legend:
           Legend(isVisible: true, overflowMode: LegendItemOverflowMode.wrap),
       tooltipBehavior: _tooltipBehavior,
@@ -114,18 +111,18 @@ class _GraphPlotState extends State<GraphPlot> {
             yValueMapper: (GraphData data, _) => data.graphValue,
             dataLabelSettings: DataLabelSettings(isVisible: true),
             enableTooltip: true,
-            maximumValue: 40000)
+            maximumValue: 4000)
       ],
     )));
   }
 
   List<GraphData> getChartData() {
     final List<GraphData> chartData = [
-      GraphData('Closed Issues', 2900),
-      GraphData('Active Issues', 23050),
-      GraphData('Total Issues Created', 24880),
-      GraphData('Active NGOs', 24880),
-      GraphData('Active Users', 34390),
+      GraphData('Closed Issues', Random().nextInt(700)),
+      GraphData('Active Issues', Random().nextInt(1400)),
+      GraphData('Total Issues Created', Random().nextInt(2100)),
+      GraphData('Active NGOs', Random().nextInt(2800)),
+      GraphData('Active Users', Random().nextInt(3500)),
     ];
     return chartData;
   }
