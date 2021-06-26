@@ -14,26 +14,28 @@ const collections = {
   requests: "requests"
 };
 
-function resolveUserCollection(claims) {
-  return collections.level[claims.level];
-}
-
 // auth trigger (new user signup)
 exports.userSignup = functions.auth.user().onCreate(async (user) => {
   // for background triggers you must return a value/promise
-  await admin.firestore().collection(collections.level[1]).doc(user.uid).set({
-    posts: 0,
-    rank: 0,
-    xp: 0,
-    updated: admin.firestore.Timestamp.now(),
-    upvotedOn: [],
-  });
-
   if (user.email === 'superadmin@mail.com') {
+    await admin.firestore().collection(collections.level[4]).doc(user.uid).set({
+      posts: 0,
+      rank: 0,
+      xp: 0,
+      updated: admin.firestore.Timestamp.now(),
+      upvotedOn: [],
+    });
     return admin.auth().setCustomUserClaims(user.uid, {
       accessLevel: 4,
     });
   } else {
+    await admin.firestore().collection(collections.level[1]).doc(user.uid).set({
+      posts: 0,
+      rank: 0,
+      xp: 0,
+      updated: admin.firestore.Timestamp.now(),
+      upvotedOn: [],
+    });
     return admin.auth().setCustomUserClaims(user.uid, {
       accessLevel: 1,
     });
@@ -52,6 +54,7 @@ exports.newPost = functions.firestore.document(collections.posts + '/{docId}').o
 
 // http call (approve user for higher role)
 exports.upgrade = functions.https.onCall(async (data, context) => {
+  console.log('data id = ' + data.id);
   if (!context.auth) {
     throw new functions.https.HttpsError(
       'unauthenticated',
@@ -61,7 +64,7 @@ exports.upgrade = functions.https.onCall(async (data, context) => {
 
   // only privileged users can upgrade someone to Lv2 or Lv3
   var user = await admin.auth().getUser(context.auth.uid);
-  var userLevel = user.customClaims.level;
+  var userLevel = user.customClaims.accessLevel;
   if (userLevel !== 3 && userLevel !== 4) {
     throw new functions.https.HttpsError(
       'unauthenticated',
@@ -69,22 +72,28 @@ exports.upgrade = functions.https.onCall(async (data, context) => {
     );
   }
 
+  console.log('userLevel = ' + user.email);
   var client = await admin.auth().getUser(data.id);
-  var collection = resolveUserCollection(client.customClaims.level);
+  var collection = collections.level[client.customClaims.accessLevel];
+  console.log('client collection = ' + collection);
   var clientDoc = admin.firestore().collection(collection).doc(client.uid);
   var requestDoc = admin.firestore().collection(collections.requests).doc(client.uid);
 
   var upgradeRequestInfo = await requestDoc.get();
 
+  console.log('upgrade info = ' + upgradeRequestInfo.data().address);
+
   // only super users can upgrade someone to Lv3
   if (upgradeRequestInfo.data().level === 3 && userLevel !== 4) {
     throw new functions.https.HttpsError(
       'unauthenticated',
-      'only highly privileged users can add requests',
+      'only super users can add requests',
     );
   }
 
   var clientActivityInfo = await clientDoc.get();
+
+  console.log('client info = ' + clientActivityInfo.data().posts);
 
   var dataToWrite = {
     posts: clientActivityInfo.data().posts,
@@ -103,6 +112,7 @@ exports.upgrade = functions.https.onCall(async (data, context) => {
   await requestDoc.delete();
 
   collection = collections.level[upgradeRequestInfo.data().level];
+  console.log('collection info = ' + collection);
   await admin.firestore().collection(collection).doc(client.uid).set(dataToWrite);
   return admin.auth().setCustomUserClaims(client.uid, {
     accessLevel: upgradeRequestInfo.data().level,

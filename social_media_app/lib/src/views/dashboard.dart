@@ -19,13 +19,14 @@ class DashboardScreen extends StatefulWidget {
 
   final higherAuthorityUser = [
     Destination(title: 'Trending', icon: FontAwesomeIcons.search, widget: TrendingPosts()),
+    Destination(title: 'Requests', icon: FontAwesomeIcons.accessibleIcon, widget: RequestApprovalScreen(2)),
     Destination(title: 'NGOs Connect', icon: FontAwesomeIcons.search, widget: NGOs()),
     Destination(title: 'Statistics', icon: FontAwesomeIcons.chartLine, widget: Statistics()),
   ];
 
   final superAdminUser = [
-    Destination(title: 'Requests (Lv 2)', icon: FontAwesomeIcons.accessibleIcon, widget: RequestApprovalScreen(level: 2)),
-    Destination(title: 'Requests (Lv 3)', icon: FontAwesomeIcons.search, widget: RequestApprovalScreen(level: 3)),
+    Destination(title: 'Requests (Lv 2)', icon: FontAwesomeIcons.accessibleIcon, widget: RequestApprovalScreen(2)),
+    Destination(title: 'Requests (Lv 3)', icon: FontAwesomeIcons.search, widget: RequestApprovalScreen(3)),
     Destination(title: 'NGOs Connect', icon: FontAwesomeIcons.search, widget: NGOs()),
   ];
 
@@ -110,7 +111,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
         confineInSafeArea: true,
         handleAndroidBackButtonPress: true, // Default is true.
         resizeToAvoidBottomInset: true, // This needs to be true if you want to move up the screen when keyboard appears. Default is true.
-        stateManagement: true, // Default is true.
+        stateManagement: false, // Default is true.
         hideNavigationBarWhenKeyboardShows: true, // Recommended to set 'resizeToAvoidBottomInset' as true while using this argument. Default is true.
         backgroundColor: Theme.of(context).primaryColor, // Default is Colors.white.
         decoration: NavBarDecoration(
