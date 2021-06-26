@@ -46,6 +46,12 @@ ThemeData lightTheme = ThemeData.light().copyWith(
     color: Colors.grey.shade600,
   ),
 
+  elevatedButtonTheme: ElevatedButtonThemeData(
+    style: ButtonStyle(
+      backgroundColor: MaterialStateProperty.all(const Color(0xFF10B73F)),
+    ),
+  ),
+
   inputDecorationTheme: InputDecorationTheme(
     border: OutlineInputBorder(
       borderSide: BorderSide.none,
@@ -53,6 +59,10 @@ ThemeData lightTheme = ThemeData.light().copyWith(
     ),
     filled: true,
     fillColor: const Color(0xFFEEEEEE),
+  ),
+
+  radioTheme: RadioThemeData(
+    fillColor: MaterialStateProperty.all(const Color(0xFF10B73F)),
   ),
 
   snackBarTheme: SnackBarThemeData(

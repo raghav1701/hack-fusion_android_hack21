@@ -10,14 +10,17 @@ class _TnCBody extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        buildTextItem('To Do\n...\n...\n...'),
-        buildHeaderText('Our Privacy Policy'),
-        buildTextItem('...\n...\n...'),
-        //TODO: Add Terms and Conditions
-      ],
+    return SingleChildScrollView(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          buildTextItem('Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Erat nam at lectus urna duis convallis convallis tellus. Et ultrices neque ornare aenean euismod elementum nisi quis eleifend. Malesuada fames ac turpis egestas. Viverra ipsum nunc aliquet bibendum enim facilisis gravida.'),
+          buildHeaderText('Our Privacy Policy'),
+          buildTextItem('Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Erat nam at lectus urna duis convallis convallis tellus. Et ultrices neque ornare aenean euismod elementum nisi quis eleifend. Malesuada fames ac turpis egestas. Viverra ipsum nunc aliquet bibendum enim facilisis gravida.'),
+          buildTextItem('Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Erat nam at lectus urna duis convallis convallis tellus. Et ultrices neque ornare aenean euismod elementum nisi quis eleifend. Malesuada fames ac turpis egestas. Viverra ipsum nunc aliquet bibendum enim facilisis gravida.'),
+          //TODO: Add Terms and Conditions
+        ],
+      ),
     );
   }
 
@@ -110,7 +113,7 @@ class TermsAndConditionsDialog extends AlertDialog {
               SizedBox(
                 height: 8.0,
               ),
-              _TnCBody(),
+              Expanded(child: _TnCBody()),
             ],
           ),
         );
