@@ -54,7 +54,6 @@ exports.newPost = functions.firestore.document(collections.posts + '/{docId}').o
 
 // http call (approve user for higher role)
 exports.upgrade = functions.https.onCall(async (data, context) => {
-  console.log('data id = ' + data.id);
   if (!context.auth) {
     throw new functions.https.HttpsError(
       'unauthenticated',
@@ -72,16 +71,12 @@ exports.upgrade = functions.https.onCall(async (data, context) => {
     );
   }
 
-  console.log('userLevel = ' + user.email);
   var client = await admin.auth().getUser(data.id);
   var collection = collections.level[client.customClaims.accessLevel];
-  console.log('client collection = ' + collection);
   var clientDoc = admin.firestore().collection(collection).doc(client.uid);
   var requestDoc = admin.firestore().collection(collections.requests).doc(client.uid);
 
   var upgradeRequestInfo = await requestDoc.get();
-
-  console.log('upgrade info = ' + upgradeRequestInfo.data().address);
 
   // only super users can upgrade someone to Lv3
   if (upgradeRequestInfo.data().level === 3 && userLevel !== 4) {
@@ -92,8 +87,6 @@ exports.upgrade = functions.https.onCall(async (data, context) => {
   }
 
   var clientActivityInfo = await clientDoc.get();
-
-  console.log('client info = ' + clientActivityInfo.data().posts);
 
   var dataToWrite = {
     posts: clientActivityInfo.data().posts,
@@ -112,9 +105,39 @@ exports.upgrade = functions.https.onCall(async (data, context) => {
   await requestDoc.delete();
 
   collection = collections.level[upgradeRequestInfo.data().level];
-  console.log('collection info = ' + collection);
   await admin.firestore().collection(collection).doc(client.uid).set(dataToWrite);
   return admin.auth().setCustomUserClaims(client.uid, {
     accessLevel: upgradeRequestInfo.data().level,
   });
+});
+
+exports.upvote = functions.https.onCall(async (data, context) => {
+  if (!context.auth) {
+    throw new functions.https.HttpsError(
+      'unauthenticated',
+      'only authenticated can add requests',
+    );
+  }
+
+  var userId = context.auth.uid;
+  var user = await admin.auth().getUser(userId);
+  var accessLevel = user.customClaims.accessLevel;
+
+  var postId = data.id;
+
+  var userDoc = admin.firestore().collection(collections.level[accessLevel]).doc(userId);
+  var postDoc = admin.firestore().collection(collections.posts).doc(postId);
+
+  var userData = await userDoc.get();
+
+  if (userData.upvotedOn.includes(postId)) {
+    return 'Already Liked';
+  } else {
+    await doc.update({
+      upvotedOn: admin.firestore.FieldValue.arrayUnion([postId]),
+    });
+    return postDoc.update({
+      upvotes: admin.firestore.FieldValue.increment(1),
+    });
+  }
 });
