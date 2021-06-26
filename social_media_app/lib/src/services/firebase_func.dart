@@ -33,4 +33,29 @@ class FirebaseFunctionService {
       return Result(code: Code.EXCEPTION, message: e.toString());
     }
   }
+
+  Future<Result> upvotePost(String postId) async {
+    try {
+      await _functions
+        .httpsCallable(
+          'upvote',
+          options: HttpsCallableOptions(
+            timeout: Duration(seconds: 20),
+          ),
+        ).call({
+          'id': postId,
+        });
+      return Result(code: Code.SUCCESS);
+    } on FirebaseException catch (e) {
+      return Result(code: Code.FIREBASEAUTH_EXCEPTION, message: e.message);
+    } on SocketException catch (e) {
+      return Result(code: Code.SOCKET_EXCEPTION, message: e.message);
+    } on PlatformException catch (e) {
+      return Result(code: Code.PLATFORM_EXCEPTION, message: e.message);
+    } on TimeoutException catch (e) {
+      return Result(code: Code.TIMEOUT_EXCEPTION, message: e.message);
+    } catch (e) {
+      return Result(code: Code.EXCEPTION, message: e.toString());
+    }
+  }
 }
