@@ -30,10 +30,14 @@ class _UpgradeProfileScreenState extends State<UpgradeProfileScreen> {
     await progressDialog.show();
     var result = await FirestoreService().postUpgradeRequest(
       uid: FirebaseAuthService.user.uid,
-      phone: phone,
-      address: address,
-      docLink: docLink,
-      level: level,
+      info: RequestItem(
+        name: FirebaseAuthService.user.displayName,
+        email: FirebaseAuthService.user.email,
+        phone: phone,
+        address: address,
+        docLink: docLink,
+        level: level,
+      ),
     );
 
     if (!mounted) return;

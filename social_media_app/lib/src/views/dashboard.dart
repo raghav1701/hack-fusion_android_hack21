@@ -4,8 +4,6 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:social_media_app/social_media.dart';
 import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
 import 'package:social_media_app/src/views/fragments/stats.dart';
-import 'package:social_media_app/src/views/make_post.dart';
-
 
 class DashboardScreen extends StatefulWidget {
   final regularUsers = [
@@ -73,7 +71,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
     mycontext=context;
     return Scaffold(
       appBar: AppBar(
-        title: Text(bottomBarItems[tabSelected].title),
+        title: Text(bottomBarItems[_controller.index].title),
         actions: [
           IconButton(
             icon: Icon(FontAwesomeIcons.solidCommentDots, size: 32.0),

@@ -1,6 +1,5 @@
 import 'package:flutter/widgets.dart';
 import 'package:social_media_app/social_media.dart';
-import 'package:social_media_app/src/views/make_post.dart';
 
 class Routes {
   Routes._();
