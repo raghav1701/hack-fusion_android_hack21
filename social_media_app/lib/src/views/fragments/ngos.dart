@@ -2,21 +2,36 @@ import 'package:flutter/material.dart';
 import 'package:social_media_app/social_media.dart';
 
 class NGOs extends StatelessWidget {
-  var titleList = ["NGO 1", "NGO 2", "NGO 3", "NGO 4", "NGO 5"];
+  var titleList = [
+    "NGO 1",
+    "NGO 2",
+    "NGO 3",
+    "NGO 4",
+    "NGO 5",
+    "NGO 6",
+    "NGO 7",
+    "NGO 8"
+  ];
   var imageList = [
-    Assets.loginPageImage,
-    Assets.signupPageImage,
-    Assets.welcomePageImage,
-    Assets.loginPageImage,
-    Assets.signupPageImage,
+    "images/ngo1.jpeg",
+    "images/ngo2.jpeg",
+    "images/ngo3.jpeg",
+    "images/ngo4.jpeg",
+    "images/ngo5.png",
+    "images/ngo6.png",
+    "images/ngo7.jpeg",
+    "images/ngo8.jpeg"
   ];
 
   var contactNo = [
     "7042347146",
-    "1234567890",
-    "0123456789",
-    "654738245",
-    "394738472",
+    "9234567890",
+    "8123456789",
+    "9547382454",
+    "7947384725",
+    "9887658976",
+    "9876789432",
+    "9865465930"
   ];
 
   @override
@@ -53,7 +68,8 @@ class NGOs extends StatelessWidget {
                           SizedBox(height: 4.0),
                           Text(
                             contactNo[index],
-                            style: TextStyle(fontSize: 17, color: Colors.grey[500]),
+                            style: TextStyle(
+                                fontSize: 17, color: Colors.grey[500]),
                           ),
                         ],
                       ),

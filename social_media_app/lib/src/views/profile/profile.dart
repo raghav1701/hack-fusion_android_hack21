@@ -40,7 +40,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
         acceptText: 'Logout',
         onAccept: () async {
           await FirebaseAuth.instance.signOut();
-          Navigator.of(context).pushNamedAndRemoveUntil(Routes.welcome, (route) => false);
+          Navigator.of(context)
+              .pushNamedAndRemoveUntil(Routes.welcome, (route) => false);
         },
       );
     }
@@ -107,7 +108,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(isCurrentAuthUser ? 'My Profile' : '${name.split(' ').first}\'s Profile'),
+        title: Text(isCurrentAuthUser
+            ? 'My Profile'
+            : '${name.split(' ').first}\'s Profile'),
         actions: [
           PopupMenuButton(
             itemBuilder: (_) => menuItems.map((e) {
@@ -153,8 +156,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
     return Stack(
       children: [
         CircleAvatar(
-          foregroundImage:
-              NetworkImage(profilePic ?? ''),
+          foregroundImage: NetworkImage(profilePic ?? ''),
           child: Icon(Icons.person),
           backgroundColor: Colors.white,
           minRadius: 36.0,
@@ -182,15 +184,16 @@ class _ProfileScreenState extends State<ProfileScreen> {
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       children: [
         authLevel == 1
-          ? buildActivityAsset(context, 'Posts', '$posts')
-          : buildActivityAsset(context, 'Level', '$authLevel'),
+            ? buildActivityAsset(context, 'Posts', '$posts')
+            : buildActivityAsset(context, 'Level', '$authLevel'),
         buildActivityAsset(context, 'Rank', '$rank'),
         buildActivityAsset(context, 'XP', '$xp'),
       ],
     );
   }
 
-  Widget buildActivityAsset(BuildContext context, String title, String content) {
+  Widget buildActivityAsset(
+      BuildContext context, String title, String content) {
     return Container(
       padding: const EdgeInsets.all(8.0),
       margin: const EdgeInsets.all(4.0),
@@ -300,8 +303,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       Expanded(
                         child: Text(
                           isCurrentAuthUser
-                            ? 'You haven\'t not posted anything in a while'
-                            : 'This user hasn\'t posted anything yet',
+                              ? 'You haven\'t not posted anything in a while'
+                              : 'This user hasn\'t posted anything yet',
                           textAlign: TextAlign.center,
                         ),
                       ),
