@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:social_media_app/social_media.dart';
 
@@ -27,6 +28,23 @@ class _ProfileScreenState extends State<ProfileScreen> {
   int authLevel;
   String address, phone, xp, rank, posts, error;
   List<QueryDocumentSnapshot<Map<String, Object>>> postsList = [];
+
+  final menuItems = ['Log Out'];
+
+  void handleMenu(String val) async {
+    if (val == menuItems[0]) {
+      showConfirmDialog(
+        context,
+        'Warning',
+        content: 'You\'re about to log out. Confirm log out?',
+        acceptText: 'Logout',
+        onAccept: () async {
+          await FirebaseAuth.instance.signOut();
+          Navigator.of(context).pushNamedAndRemoveUntil(Routes.welcome, (route) => false);
+        },
+      );
+    }
+  }
 
   Future<void> getUserInfo() async {
     setState(() {
@@ -90,6 +108,14 @@ class _ProfileScreenState extends State<ProfileScreen> {
     return Scaffold(
       appBar: AppBar(
         title: Text(isCurrentAuthUser ? 'My Profile' : '${name.split(' ').first}\'s Profile'),
+        actions: [
+          PopupMenuButton(
+            itemBuilder: (_) => menuItems.map((e) {
+              return PopupMenuItem(child: Text(e), value: e);
+            }).toList(),
+            onSelected: handleMenu,
+          ),
+        ],
       ),
       body: RefreshIndicator(
         onRefresh: () async {},

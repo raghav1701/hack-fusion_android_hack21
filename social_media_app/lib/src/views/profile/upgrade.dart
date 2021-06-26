@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:progress_dialog/progress_dialog.dart';
 import 'package:social_media_app/social_media.dart';
@@ -28,15 +29,15 @@ class _UpgradeProfileScreenState extends State<UpgradeProfileScreen> {
 
     FocusScope.of(context).unfocus();
     await progressDialog.show();
-    var result = await FirestoreService().postUpgradeRequest(
-      uid: FirebaseAuthService.user.uid,
-      info: RequestItem(
+    var result = await FirestoreService().postUpgradeRequest(RequestItem(
+        uid: FirebaseAuthService.user.uid,
         name: FirebaseAuthService.user.displayName,
         email: FirebaseAuthService.user.email,
         phone: phone,
         address: address,
         docLink: docLink,
         level: level,
+        timestamp: Timestamp.now(),
       ),
     );
 

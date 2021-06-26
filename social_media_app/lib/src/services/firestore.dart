@@ -59,7 +59,7 @@ class FirestoreService {
     }
   }
 
-  Future<Result> postUpgradeRequest({String uid, RequestItem info}) async {
+  Future<Result> postUpgradeRequest(RequestItem info) async {
     try {
       await _firestore
           .collection(REQUEST)
@@ -67,6 +67,28 @@ class FirestoreService {
           .set(info.toMap())
           .timeout(Duration(seconds: 20));
       return Result(code: Code.SUCCESS, message: 'Request Added Successfully');
+    } on FirebaseException catch (e) {
+      return Result(code: Code.FIREBASEAUTH_EXCEPTION, message: e.message);
+    } on SocketException catch (e) {
+      return Result(code: Code.SOCKET_EXCEPTION, message: e.message);
+    } on PlatformException catch (e) {
+      return Result(code: Code.PLATFORM_EXCEPTION, message: e.message);
+    } on TimeoutException catch (e) {
+      return Result(code: Code.TIMEOUT_EXCEPTION, message: e.message);
+    } catch (e) {
+      return Result(code: Code.EXCEPTION, message: e.toString());
+    }
+  }
+
+  Future<Result<List<QueryDocumentSnapshot<Map<String, dynamic>>>>> getPendingRequests(int level) async {
+    try {
+      var doc = await _firestore
+          .collection(REQUEST)
+          .where(RequestItem.LEVEL, isEqualTo: level)
+          .orderBy(RequestItem.TIMESTAMP)
+          .get()
+          .timeout(Duration(seconds: 40));
+      return Result(code: Code.SUCCESS, data: doc.docs);
     } on FirebaseException catch (e) {
       return Result(code: Code.FIREBASEAUTH_EXCEPTION, message: e.message);
     } on SocketException catch (e) {

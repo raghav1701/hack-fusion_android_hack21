@@ -24,7 +24,9 @@ class DashboardScreen extends StatefulWidget {
   ];
 
   final superAdminUser = [
-
+    Destination(title: 'Requests (Lv 2)', icon: FontAwesomeIcons.accessibleIcon, widget: RequestApprovalScreen(level: 2)),
+    Destination(title: 'Requests (Lv 3)', icon: FontAwesomeIcons.search, widget: RequestApprovalScreen(level: 3)),
+    Destination(title: 'NGOs Connect', icon: FontAwesomeIcons.search, widget: NGOs()),
   ];
 
   @override
