@@ -63,7 +63,7 @@ class FirestoreService {
     try {
       await _firestore
           .collection(REQUEST)
-          .doc(uid)
+          .doc(info.uid)
           .set(info.toMap())
           .timeout(Duration(seconds: 20));
       return Result(code: Code.SUCCESS, message: 'Request Added Successfully');

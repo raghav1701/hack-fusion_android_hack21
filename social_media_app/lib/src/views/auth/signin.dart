@@ -29,10 +29,10 @@ class _SigninScreenState extends State<SigninScreen> {
     var service = FirebaseAuthService(
       email: email,
       password: password,
-      onStart: () {
+      onStart: () async {
         if (mounted) {
           setState(() => error = null);
-          progressDialog.show();
+          await progressDialog.show();
         }
       },
       onFinish: (user, accessLevel) async {
@@ -40,9 +40,9 @@ class _SigninScreenState extends State<SigninScreen> {
         await sharedPreferences.saveUserRole(level: accessLevel);
         Navigator.of(context).pushNamedAndRemoveUntil(Routes.dashboard, (route) => false);
       },
-      onError: (code, message) {
+      onError: (code, message) async {
         if (mounted) {
-          progressDialog.hide();
+          await progressDialog.hide();
           setState(() => error = message);
         }
       },
