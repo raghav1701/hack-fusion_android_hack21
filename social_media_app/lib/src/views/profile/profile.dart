@@ -283,7 +283,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   OutlinedButton(
                     child: Text('Add Post'),
                     onPressed: () {
-                      //TODO: Navigate to Add Post
+                      //TODO: Navigate to Add Post picl
                     },
                   )
                 ],

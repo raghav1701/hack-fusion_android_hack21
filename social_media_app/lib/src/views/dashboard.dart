@@ -4,13 +4,13 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:social_media_app/social_media.dart';
 import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
 import 'package:social_media_app/src/views/fragments/stats.dart';
+import 'package:social_media_app/src/views/make_post.dart';
 
 
 class DashboardScreen extends StatefulWidget {
   final regularUsers = [
     Destination(title: 'Home', icon: FontAwesomeIcons.home, widget: Home()),
     Destination(title: 'Trending', icon: FontAwesomeIcons.search, widget: TrendingPosts()),
-    Destination(title: 'Post', icon: FontAwesomeIcons.plusSquare, widget: AddPost()),
     Destination(title: 'NGOs', icon: FontAwesomeIcons.hands, widget: NGOs()),
     Destination(title: 'Statistics', icon: FontAwesomeIcons.chartLine, widget: Statistics()),
   ];
@@ -37,6 +37,8 @@ class DashboardScreen extends StatefulWidget {
 }
 
 class _DashboardScreenState extends State<DashboardScreen> {
+
+  BuildContext mycontext;
   List<Destination> bottomBarItems;
   int tabSelected = 0;
 
@@ -68,6 +70,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
 
   @override
   Widget build(BuildContext context) {
+    mycontext=context;
     return Scaffold(
       appBar: AppBar(
         title: Text(bottomBarItems[tabSelected].title),
@@ -124,6 +127,9 @@ class _DashboardScreenState extends State<DashboardScreen> {
   }
 
   List<Widget> _buildScreens() {
+    if (bottomBarItems == widget.regularUsers) {
+      bottomBarItems.insert(2, Destination(title: 'Post', icon: FontAwesomeIcons.plusSquare, widget: AddPost(mycontext: mycontext,)));
+    }
     return bottomBarItems.map((e) => e.widget).toList();
   }
 

@@ -1,5 +1,6 @@
 import 'package:flutter/widgets.dart';
 import 'package:social_media_app/social_media.dart';
+import 'package:social_media_app/src/views/make_post.dart';
 
 class Routes {
   Routes._();
@@ -16,6 +17,7 @@ class Routes {
   static const profile = '/profile';
   static const upgrade = '$profile/upgrade';
   static const editProfile = '$profile/edit';
+
 
   static Map<String, WidgetBuilder> routes = {
     wrapper: (_) => Wrapper(),
