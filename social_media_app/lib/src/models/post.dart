@@ -33,7 +33,7 @@ class PostItem {
   final String region;
   final GeoPoint location;
   final int upvotes;
-  final PostStatus status;
+  final int status;
   final String uid;
 
   /// ```dart

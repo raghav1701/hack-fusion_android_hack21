@@ -9,6 +9,7 @@ import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:social_media_app/social_media.dart';
 
+
 bool loading = false;
 String uid;
 GeoPoint currentPosition;
@@ -30,6 +31,8 @@ class _MakePostState extends State<MakePost> {
   TextEditingController address=TextEditingController();
   TextEditingController district=TextEditingController();
 
+
+
   @override
   void initState() {
     uid=FirebaseAuth.instance.currentUser.uid;
@@ -40,6 +43,7 @@ class _MakePostState extends State<MakePost> {
 
   @override
   Widget build(BuildContext context) {
+
     return new Scaffold(
       appBar: AppBar(
         title: Text('Make Post'),
@@ -156,15 +160,20 @@ class _MakePostState extends State<MakePost> {
 
     try {
       FirebaseFirestore.instance.collection("posts").add({
-        "postedbyUID":uid,
-        "imgUrl": postImgUrl,
-        "caption": caption.text.trim(),
-        "location": currentPosition,
-        "address":address.text.trim(),
-        "region":district.text.trim(),
-        "upvotes": 0,
-        "status": "Pending",
-        "timeStamp": DateTime.now(),
+        PostItem.POSTED_BY:uid,
+        PostItem.IMG_URL: postImgUrl,
+        PostItem.CAPTION : caption.text.trim(),
+        PostItem.LOCATION: currentPosition,
+        PostItem.ADDRESS:address.text.trim(),
+        PostItem.REGION:district.text.trim(),
+        PostItem.UPVOTES: 0,
+        PostItem.STATUS : 0,
+        PostItem.TIMESTAMP: DateTime.now(),
+        PostItem.POSTED_BY_USER: {
+          PostItem.POST_USER_NAME:FirebaseAuth.instance.currentUser.displayName,
+          PostItem.POST_IMG_URL:'https://picsum.photos/50'
+        },
+
 
       }).then((value) {
         setState(() {
@@ -176,7 +185,7 @@ class _MakePostState extends State<MakePost> {
           duration: Duration(seconds: 2),
           snackPosition: SnackPosition.BOTTOM,
         );
-        Navigator.of(context).push(MaterialPageRoute(builder: (context) => Home(context)));
+        Navigator.pop(context);
       });
     }
     catch(e){
