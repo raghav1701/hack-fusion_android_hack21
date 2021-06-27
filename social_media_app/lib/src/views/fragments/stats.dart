@@ -37,43 +37,51 @@ class _StatisticsState extends State<Statistics> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: ListView.builder(
-        itemCount: titleList.length,
-        itemBuilder: (context, index) {
-          return GestureDetector(
-            onTap: () => Navigator.of(context)
-                .push(MaterialPageRoute(builder: (context) {
-              return GraphPlot();
-            })),
-            child: Card(
-              child: Row(
-                children: <Widget>[
-                  Container(
-                    width: 100,
-                    height: 120,
-                    child: Image.asset(imageList[index]),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.all(40.0),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: <Widget>[
-                        Text(
-                          titleList[index],
-                          style: TextStyle(
-                            fontSize: 20,
-                            color: Colors.red,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                      ],
+      body: Container(
+        decoration: BoxDecoration(
+          image: DecorationImage(
+            image: AssetImage("images/bg.jpeg"),
+            fit: BoxFit.cover,
+          ),
+        ),
+        child: ListView.builder(
+          itemCount: titleList.length,
+          itemBuilder: (context, index) {
+            return GestureDetector(
+              onTap: () => Navigator.of(context)
+                  .push(MaterialPageRoute(builder: (context) {
+                return GraphPlot();
+              })),
+              child: Card(
+                child: Row(
+                  children: <Widget>[
+                    Container(
+                      width: 100,
+                      height: 90,
+                      child: Image.asset(imageList[index]),
                     ),
-                  )
-                ],
+                    Padding(
+                      padding: const EdgeInsets.all(40.0),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: <Widget>[
+                          Text(
+                            titleList[index],
+                            style: TextStyle(
+                              fontSize: 20,
+                              color: Colors.red,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ],
+                      ),
+                    )
+                  ],
+                ),
               ),
-            ),
-          );
-        },
+            );
+          },
+        ),
       ),
     );
   }
@@ -121,8 +129,8 @@ class _GraphPlotState extends State<GraphPlot> {
       GraphData('Closed Issues', Random().nextInt(700)),
       GraphData('Active Issues', Random().nextInt(1400)),
       GraphData('Total Issues Created', Random().nextInt(2100)),
-      GraphData('Active NGOs', Random().nextInt(2800)),
-      GraphData('Active Users', Random().nextInt(3500)),
+      GraphData('Active NGOs', Random().nextInt(2900)),
+      GraphData('Active Users', Random().nextInt(3300)),
     ];
     return chartData;
   }
