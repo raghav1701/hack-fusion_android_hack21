@@ -11,7 +11,8 @@ const collections = {
     'super_admin',
   ],
   posts: "posts",
-  requests: "requests"
+  requests: "requests",
+  chats: "chats"
 };
 
 // auth trigger (new user signup)
@@ -111,6 +112,7 @@ exports.upgrade = functions.https.onCall(async (data, context) => {
   });
 });
 
+// add like to a post
 exports.upvote = functions.https.onCall(async (data, context) => {
   if (!context.auth) {
     throw new functions.https.HttpsError(
@@ -138,6 +140,80 @@ exports.upvote = functions.https.onCall(async (data, context) => {
     });
     return postDoc.update({
       upvotes: admin.firestore.FieldValue.increment(1),
+    });
+  }
+});
+
+exports.addMessage = functions.https.onCall(async (data, context) => {
+  if (!context.auth) {
+    throw new functions.https.HttpsError(
+      'unauthenticated',
+      'only authenticated can send messages',
+    );
+  }
+
+  var userId = context.auth.uid;
+  var userName = data.username;
+  var userLevel = data.userLevel;
+  var userCollection = collections.level[userLevel];
+  var userProfile = data.userImg;
+
+  var receiverId = data.receiverId;
+  var receiverName = data.receiverName;
+  var receiverLevel = data.receiverLevel;
+  var receiverCollection = collections.level[receiverLevel];
+  var receiverProfile = data.receiverImg;
+
+  var content = data.message;
+
+  var userDoc = admin.firestore()
+      .collection(userCollection)
+      .doc(userId)
+      .collection(collections.chats)
+      .doc(receiverId);
+
+  var receiverDoc = admin.firestore()
+      .collection(receiverCollection)
+      .doc(receiverId)
+      .collection(collections.chats)
+      .doc(userId);
+
+  var userData = await userDoc.get();
+  var receiverData = await receiverDoc.get();
+
+  if (userData.exists) {
+    await userDoc.update({
+      'name': receiverName,
+      'level': receiverLevel,
+      'profileImg': receiverProfile,
+      'messages': [...userData.data().messages, content],
+      'timestamp': admin.firestore.Timestamp.now(),
+    });
+  } else {
+    await userDoc.create({
+      'name': receiverName,
+      'level': receiverLevel,
+      'profileImg': receiverProfile,
+      'messages': [content],
+      'timestamp': admin.firestore.Timestamp.now(),
+    });
+  }
+
+  if (receiverData.exists) {
+    return await receiverDoc.update({
+      'name': userName,
+      'level': userLevel,
+      'profileImg': userProfile,
+      'messages': [...receiverData.data().messages, content],
+      'timestamp': admin.firestore.Timestamp.now(),
+    });
+  } else {
+    return await receiverDoc.create({
+      'name': userName,
+      'level': userLevel,
+      'profileImg': userProfile,
+      'messages': [content],
+      'timestamp': admin.firestore.Timestamp.now(),
     });
   }
 });
