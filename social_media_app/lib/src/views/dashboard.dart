@@ -10,19 +10,19 @@ class DashboardScreen extends StatefulWidget {
   final regularUsers = [
     Destination(title: 'Trending', icon: FontAwesomeIcons.search, widget: TrendingPosts()),
     Destination(title: 'NGOs Connect', icon: FontAwesomeIcons.hands, widget: NGOs()),
-    Destination(title: 'Statistics', icon: FontAwesomeIcons.chartLine, widget: Statistics()),
+    Destination(title: 'Regional Hygiene Stats', icon: FontAwesomeIcons.chartLine, widget: Statistics()),
   ];
 
   final authorisedUsers = [
     Destination(title: 'Trending', icon: FontAwesomeIcons.search, widget: TrendingPosts()),
-    Destination(title: 'Statistics', icon: FontAwesomeIcons.chartLine, widget: Statistics()),
+    Destination(title: 'Regional Hygiene Stats', icon: FontAwesomeIcons.chartLine, widget: Statistics()),
   ];
 
   final higherAuthorityUser = [
     Destination(title: 'Trending', icon: FontAwesomeIcons.search, widget: TrendingPosts()),
     Destination(title: 'Requests', icon: FontAwesomeIcons.accessibleIcon, widget: RequestApprovalScreen(2)),
     Destination(title: 'NGOs Connect', icon: FontAwesomeIcons.hands, widget: NGOs()),
-    Destination(title: 'Statistics', icon: FontAwesomeIcons.chartLine, widget: Statistics()),
+    Destination(title: 'Regional Hygiene Stats', icon: FontAwesomeIcons.chartLine, widget: Statistics()),
   ];
 
   final superAdminUser = [
