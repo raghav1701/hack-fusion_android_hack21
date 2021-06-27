@@ -7,27 +7,57 @@ import 'package:social_media_app/src/views/fragments/stats.dart';
 
 class DashboardScreen extends StatefulWidget {
   final regularUsers = [
-    Destination(title: 'Trending', icon: FontAwesomeIcons.search, widget: TrendingPosts()),
-    Destination(title: 'NGOs Connect', icon: FontAwesomeIcons.hands, widget: NGOs()),
-    Destination(title: 'Statistics', icon: FontAwesomeIcons.chartLine, widget: Statistics()),
+    Destination(
+        title: 'Trending',
+        icon: FontAwesomeIcons.search,
+        widget: TrendingPosts()),
+    Destination(
+        title: 'NGOs Connect', icon: FontAwesomeIcons.hands, widget: NGOs()),
+    Destination(
+        title: 'Regional Hygiene Stats',
+        icon: FontAwesomeIcons.chartLine,
+        widget: Statistics()),
   ];
 
   final authorisedUsers = [
-    Destination(title: 'Trending', icon: FontAwesomeIcons.search, widget: TrendingPosts()),
-    Destination(title: 'Statistics', icon: FontAwesomeIcons.chartLine, widget: Statistics()),
+    Destination(
+        title: 'Trending',
+        icon: FontAwesomeIcons.search,
+        widget: TrendingPosts()),
+    Destination(
+        title: 'Regional Hygiene Stats',
+        icon: FontAwesomeIcons.chartLine,
+        widget: Statistics()),
   ];
 
   final higherAuthorityUser = [
-    Destination(title: 'Trending', icon: FontAwesomeIcons.search, widget: TrendingPosts()),
-    Destination(title: 'Requests', icon: FontAwesomeIcons.accessibleIcon, widget: RequestApprovalScreen(2)),
-    Destination(title: 'NGOs Connect', icon: FontAwesomeIcons.search, widget: NGOs()),
-    Destination(title: 'Statistics', icon: FontAwesomeIcons.chartLine, widget: Statistics()),
+    Destination(
+        title: 'Trending',
+        icon: FontAwesomeIcons.search,
+        widget: TrendingPosts()),
+    Destination(
+        title: 'Requests',
+        icon: FontAwesomeIcons.accessibleIcon,
+        widget: RequestApprovalScreen(2)),
+    Destination(
+        title: 'NGOs Connect', icon: FontAwesomeIcons.search, widget: NGOs()),
+    Destination(
+        title: 'Regional Hygiene Stats',
+        icon: FontAwesomeIcons.chartLine,
+        widget: Statistics()),
   ];
 
   final superAdminUser = [
-    Destination(title: 'Requests (Lv 2)', icon: FontAwesomeIcons.accessibleIcon, widget: RequestApprovalScreen(2)),
-    Destination(title: 'Requests (Lv 3)', icon: FontAwesomeIcons.search, widget: RequestApprovalScreen(3)),
-    Destination(title: 'NGOs Connect', icon: FontAwesomeIcons.search, widget: NGOs()),
+    Destination(
+        title: 'Requests (Lv 2)',
+        icon: FontAwesomeIcons.accessibleIcon,
+        widget: RequestApprovalScreen(2)),
+    Destination(
+        title: 'Requests (Lv 3)',
+        icon: FontAwesomeIcons.search,
+        widget: RequestApprovalScreen(3)),
+    Destination(
+        title: 'NGOs Connect', icon: FontAwesomeIcons.search, widget: NGOs()),
   ];
 
   @override
@@ -51,27 +81,36 @@ class _DashboardScreenState extends State<DashboardScreen> {
     super.initState();
     var level = sharedPreferences.authLevel;
     switch (level) {
-      case 1: bottomBarItems = widget.regularUsers;
-        bottomBarItems.insert(1, Destination(
-          title: 'Post',
-          icon: FontAwesomeIcons.plusSquare,
-          widget: AddPost(context),
-        ));
+      case 1:
+        bottomBarItems = widget.regularUsers;
+        bottomBarItems.insert(
+            1,
+            Destination(
+              title: 'Post',
+              icon: FontAwesomeIcons.plusSquare,
+              widget: AddPost(context),
+            ));
         break;
-      case 2: bottomBarItems = widget.authorisedUsers;
+      case 2:
+        bottomBarItems = widget.authorisedUsers;
         break;
-      case 3: bottomBarItems = widget.higherAuthorityUser;
+      case 3:
+        bottomBarItems = widget.higherAuthorityUser;
         break;
-      case 4: bottomBarItems = widget.superAdminUser;
+      case 4:
+        bottomBarItems = widget.superAdminUser;
         break;
-      default: bottomBarItems = widget.regularUsers;
+      default:
+        bottomBarItems = widget.regularUsers;
     }
     if (level < 4) {
-      bottomBarItems.insert(0, Destination(
-        title: 'Local Posts',
-        icon: FontAwesomeIcons.home,
-        widget: Home(context),
-      ));
+      bottomBarItems.insert(
+          0,
+          Destination(
+            title: 'Local Posts',
+            icon: FontAwesomeIcons.home,
+            widget: Home(context),
+          ));
     }
     _controller = PersistentTabController(initialIndex: 0);
     _controller.addListener(() => setState(() {}));
@@ -92,7 +131,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
           ),
           IconButton(
             icon: CircleAvatar(
-              foregroundImage: NetworkImage(FirebaseAuth.instance.currentUser.photoURL ?? ''),
+              foregroundImage: NetworkImage(
+                  FirebaseAuth.instance.currentUser.photoURL ?? ''),
               child: Icon(Icons.person),
               backgroundColor: Colors.white,
             ),
@@ -110,26 +150,32 @@ class _DashboardScreenState extends State<DashboardScreen> {
         items: _navBarsItems(),
         confineInSafeArea: true,
         handleAndroidBackButtonPress: true, // Default is true.
-        resizeToAvoidBottomInset: true, // This needs to be true if you want to move up the screen when keyboard appears. Default is true.
+        resizeToAvoidBottomInset:
+            true, // This needs to be true if you want to move up the screen when keyboard appears. Default is true.
         stateManagement: false, // Default is true.
-        hideNavigationBarWhenKeyboardShows: true, // Recommended to set 'resizeToAvoidBottomInset' as true while using this argument. Default is true.
-        backgroundColor: Theme.of(context).primaryColor, // Default is Colors.white.
+        hideNavigationBarWhenKeyboardShows:
+            true, // Recommended to set 'resizeToAvoidBottomInset' as true while using this argument. Default is true.
+        backgroundColor:
+            Theme.of(context).primaryColor, // Default is Colors.white.
         decoration: NavBarDecoration(
           borderRadius: BorderRadius.circular(10.0),
           colorBehindNavBar: Theme.of(context).primaryColor,
         ),
         popAllScreensOnTapOfSelectedTab: true,
         popActionScreens: PopActionScreensType.all,
-        itemAnimationProperties: ItemAnimationProperties( // Navigation Bar's items animation properties.
+        itemAnimationProperties: ItemAnimationProperties(
+          // Navigation Bar's items animation properties.
           duration: Duration(milliseconds: 200),
           curve: Curves.ease,
         ),
-        screenTransitionAnimation: ScreenTransitionAnimation( // Screen transition animation on change of selected tab.
+        screenTransitionAnimation: ScreenTransitionAnimation(
+          // Screen transition animation on change of selected tab.
           animateTabTransition: true,
           curve: Curves.ease,
           duration: Duration(milliseconds: 200),
         ),
-        navBarStyle: NavBarStyle.style12, // Choose the nav bar style with this property.
+        navBarStyle:
+            NavBarStyle.style12, // Choose the nav bar style with this property.
       ),
     );
   }
