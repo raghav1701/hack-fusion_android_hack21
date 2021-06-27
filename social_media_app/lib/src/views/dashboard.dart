@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -43,6 +44,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
   void handleAppActions(int index) {
     if (index == 1) {
       Navigator.of(context).pushNamed(Routes.profile);
+    } else {
+      Navigator.of(context).pushNamed(Routes.chat);
     }
   }
 
@@ -92,7 +95,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
           ),
           IconButton(
             icon: CircleAvatar(
-              foregroundImage: NetworkImage(FirebaseAuth.instance.currentUser.photoURL ?? ''),
+              foregroundImage: CachedNetworkImageProvider(FirebaseAuth.instance.currentUser.photoURL ?? 'https://picsum.photos/50'),
               child: Icon(Icons.person),
               backgroundColor: Colors.white,
             ),

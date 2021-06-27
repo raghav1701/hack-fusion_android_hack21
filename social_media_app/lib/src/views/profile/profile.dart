@@ -266,7 +266,16 @@ class _ProfileScreenState extends State<ProfileScreen> {
           Expanded(
             child: OutlinedButton.icon(
               onPressed: () {
-                //TODO: Chat with this user
+                Navigator.of(context).push(MaterialPageRoute(
+                  builder: (_) {
+                    return ChatRoom(
+                      name: '${name.split(' ').first}',
+                      receiverId: uid,
+                      receiverLevel: authLevel,
+                      picURL: profilePic,
+                    );
+                  }
+                ));
               },
               icon: Icon(Icons.message),
               label: Text('Send Message'),

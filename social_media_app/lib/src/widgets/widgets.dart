@@ -7,3 +7,5 @@ export 'tap_detector.dart';
 // fragments' widgets
 export 'fragments/home_item.dart';
 export 'fragments/trend_item.dart';
+
+export 'chat/bubble.dart';

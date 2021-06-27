@@ -164,7 +164,10 @@ exports.addMessage = functions.https.onCall(async (data, context) => {
   var receiverCollection = collections.level[receiverLevel];
   var receiverProfile = data.receiverImg;
 
-  var content = data.message;
+  var content = {
+    'text': data.message,
+    'sender': userId,
+  };
 
   var userDoc = admin.firestore()
       .collection(userCollection)

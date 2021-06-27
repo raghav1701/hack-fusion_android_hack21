@@ -28,9 +28,11 @@ class MyPost extends StatelessWidget {
   final Function onUpvote;
 
   void handlePopupMenu(String val) {
+    print("handle called");
     if (val == 'Get Directions') {
       onGetDirections();
     } else if (val == 'Mark as Solved') {
+      print("mark called");
       onMarkSolved();
     } else if (val == 'Share') {
       onShare();
@@ -95,6 +97,7 @@ class MyPost extends StatelessWidget {
                   return menuItems.map((e) {
                     return PopupMenuItem<String>(
                       child: Text(e),
+                      value: e,
                     );
                   }).toList();
                 },

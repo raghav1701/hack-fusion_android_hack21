@@ -58,4 +58,45 @@ class FirebaseFunctionService {
       return Result(code: Code.EXCEPTION, message: e.toString());
     }
   }
+
+  Future<Result> sendMessage({
+    String userName,
+    int userLevel,
+    String userImg,
+    String receiverId,
+    String receiverName,
+    int receiverLevel,
+    String receiverImg,
+    String text,
+  }) async {
+    try {
+      await _functions
+        .httpsCallable(
+          'addMessage',
+          options: HttpsCallableOptions(
+            timeout: Duration(seconds: 20),
+          ),
+        ).call({
+          'username': userName,
+          'userLevel': userLevel,
+          'userImg': userImg,
+          'receiverId': receiverId,
+          'receiverName': receiverName,
+          'receiverLevel': receiverLevel,
+          'receiverImg': receiverImg,
+          'message': text,
+        });
+      return Result(code: Code.SUCCESS);
+    } on FirebaseException catch (e) {
+      return Result(code: Code.FIREBASEAUTH_EXCEPTION, message: e.message);
+    } on SocketException catch (e) {
+      return Result(code: Code.SOCKET_EXCEPTION, message: e.message);
+    } on PlatformException catch (e) {
+      return Result(code: Code.PLATFORM_EXCEPTION, message: e.message);
+    } on TimeoutException catch (e) {
+      return Result(code: Code.TIMEOUT_EXCEPTION, message: e.message);
+    } catch (e) {
+      return Result(code: Code.EXCEPTION, message: e.toString());
+    }
+  }
 }

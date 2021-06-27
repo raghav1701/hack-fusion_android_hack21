@@ -13,9 +13,20 @@ class FirestoreService {
   ];
   static const POSTS = 'posts';
   static const REQUEST = 'requests';
+  static const CHATS = 'chats';
 
   static final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   String _resolveUserCollection(int level) => _COLLECTION[level-1];
+
+  Query<Map<String, dynamic>> chatStream(String uid, int level) {
+    var collection = _COLLECTION[level-1];
+    return _firestore.collection(collection).doc(uid).collection(CHATS).orderBy('timestamp');
+  }
+
+  DocumentReference<Map<String, dynamic>> messageStream(String uid, String receiverId, int level, int receiverLevel) {
+    var myCollection = _COLLECTION[level-1];
+    return _firestore.collection(myCollection).doc(uid).collection(CHATS).doc(receiverId);
+  }
 
   Future<Result<Map<String, Object>>> getUserInfo(int level, String uid) async {
     var collectionPath = _resolveUserCollection(level);
